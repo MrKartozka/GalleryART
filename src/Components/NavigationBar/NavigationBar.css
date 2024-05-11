@@ -1,0 +1,28 @@
+.nav {
+    background-color: #D9D9D9;
+}
+
+.nav-container {
+    margin: 0 auto;
+    flex-wrap: wrap;
+    width: 90dvw;
+    padding: 30px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.search-field input {
+    padding: 5px;
+    border-radius: 20px;
+    width: 40dvw;
+    background-image: url("../../../public/lypa.png");
+    background-repeat: no-repeat;
+    background-position: 99%;
+}
+
+.nav-login {
+    border-radius: 20px;
+    width: 55px;
+    padding: 5px;
+}

@@ -1,0 +1,156 @@
+* {
+    font-family: 'Poppins', sans-serif;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+.login-container {
+    height: 100vh;
+    background-color: #F3F3F3;
+    display: flex;
+    align-items: center;
+}
+
+.login-character {
+    position: absolute;
+    left: 6%;
+    transform: translateX(-65%);
+    top: 50%;
+    pointer-events: none;
+}
+
+.login-box {
+    position: relative;
+    margin: 0 auto;
+    width: 505px;
+    background: white;
+    padding: 40px;
+    height: 701px;
+    border-radius: 15px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.login-header {
+    text-align: center;
+    font-size: 31px;
+    color: #333;
+    margin-top: 30px;
+}
+
+.login-form {
+    display: flex;
+    flex-direction: column;
+    margin-top: 70px;
+}
+
+.login-form label {
+    align-self: normal;
+    font-size: 14px;
+    color: black;
+}
+
+.login-form__password-field {
+    display: inline-block;
+    position: relative;
+    margin-top: 20px;
+}
+
+.login-form__password-field img {
+    position: absolute;
+    right: 20px;
+    top: 50%;
+}
+
+.login-form input[type="email"],
+.login-form input[type="password"],
+.login-form input[type="text"] {
+    padding: 30px;
+    margin: 8px 0;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    align-self: center;
+    width: 100%;
+    height: 50px;
+    box-shadow: 0px 8px 4px -2px rgba(34, 60, 80, 0.3);
+}
+
+.form-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+}
+
+.checkbox-container input[type="checkbox"] {
+    appearance: none;
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border: 2px solid #ccc;
+    background-color: white;
+    cursor: pointer;
+}
+
+.checkbox-container input[type="checkbox"]:checked {
+    background-color: #e74c3c;
+}
+
+.checkbox-container input[type="checkbox"]:focus {
+    outline: none;
+    border-color: #666;
+}
+
+.checkbox-container input[type="checkbox"]:hover {
+    border-color: #999;
+}
+
+.checkbox-container {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox-container input[type="checkbox"] {
+    margin-right: 5px;
+}
+
+.login-form button {
+    background-color: #F82424;
+    color: white;
+    padding: 16px;
+    border-radius: 16px;
+    cursor: pointer;
+    margin-top: 30px;
+    border: 10px;
+}
+
+.login-form button:hover {
+    background-color: #FD4B4B;
+}
+
+.register-link {
+    text-align: center;
+    margin-top: 60px;
+}
+
+.register-link a {
+    color: #000000;
+    text-decoration: none;
+    padding-left: 5px;
+    font-weight: bold;
+}
+
+.register-link p {
+    color: #7D7D7D;
+}
+
+
+.register-link a:hover {
+    text-decoration: underline;
+}
+
+.forgot-password {
+    text-decoration: none;
+    color: #4D4D4D;
+}
