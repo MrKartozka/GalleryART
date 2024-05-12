@@ -1,6 +1,12 @@
 .dropdown {
+    background-color: white;
+    margin: 10px 10px 0 0;
+    border-radius: 20px;
+    right: 0;
     position: absolute;
     z-index: 999;
+    padding: 5px;
+    width: 300px;
 }
 
 ul {
@@ -10,10 +16,30 @@ ul {
 }
 
 li {
-    padding: 8px 12px;
+    padding: 5px 0;
 }
 
-li:hover {
-    background-color: rgba(0, 0, 0, 0.14);
+.dropwdown__profile-info {
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.dropdown-btn {
+    background-color: transparent;
+    font-size: 16px;
+    width: 100%;
+    text-align: start;
+    border-radius: 10px;
+    border: 1px solid #b7dcff;
     cursor: pointer;
+    transition: 0.2s;
+    padding: 10px;
+}
+
+.dropdown-btn:hover {
+    border: 1px solid #2797ff;
 }

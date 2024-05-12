@@ -1,25 +1,25 @@
-.saved-groups__buttons {
+.othersaved-groups__buttons {
     margin-top: 30px;
     margin-left: 20px;
     display: flex;
     gap: 16px;
 }
 
-.saved-groups__buttons button {
+.othersaved-groups__buttons button {
     border: none;
     border-radius: 30px;
     padding: 14px;
     height: 46px;
 }
 
-.saved-groups__albums {
+.othersaved-groups__albums {
     display: flex;
     margin-top: 20px;
     margin-left: 80px;
     gap: 20px;
 }
 
-.saved-groups__albums img {
+.othersaved-groups__albums img {
     width: 200px;
     height: 100px;
 

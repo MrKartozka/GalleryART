@@ -1,21 +1,23 @@
-.profile-info__logo {
+.otherprofile-info__logo {
     text-align: center;
     margin-top: 50px;
 }
 
-.profile-info__logo button {
+.otherprofile-info__buttons .btn {
+    cursor: pointer;
     padding: 14px;
     border-radius: 20px;
     border: none;
     background-color: #D9D9D9;
 }
 
-.profile-description {
+.otherprofile-description {
     max-width: 250px;
     margin: 0 auto;
 }
 
-.profile-info__buttons {
+.otherprofile-info__buttons {
+    position: relative;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -23,30 +25,30 @@
     margin-bottom: 50px;
 }
 
-.profile-info__buttons button {
+.otherprofile-info__buttons button {
     height: 40px;
 }
 
-#profile-subscribe--btn {
+#otherprofile-subscribe--btn {
     background-color: #E60023;
     color: white;
     width: 160px;
 }
 
-#profile-options--btn {
+#otherprofile-options--btn {
     display: flex;
     align-items: center;
     font-size: 16px;
 }
 
-.profile-menu {
+.otherprofile-menu {
     display: flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
 }
 
-.profile-menu button {
+.otherprofile-menu__btn {
     display: inline-block;
     text-decoration: none;
     border: none;
@@ -54,7 +56,7 @@
     cursor: pointer;
 }
 
-.profile-menu button::after {
+.otherprofile-menu__btn::after {
     content: '';
     display: block;
     height: 2px;
@@ -63,7 +65,36 @@
     transition: ease .3s;
 }
 
-.profile-menu button:hover::after,
-.profile-menu button:focus::after {
+.otherprofile-menu__btn:hover::after,
+.otherprofile-menu__btn:focus::after {
     width: 100%;
+}
+
+.options-container {
+    position: relative;
+}
+
+.dropdown-options {
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 150px;
+    background-color: white;
+    margin-top: 5px;
+}
+
+.dropdown-btn {
+    background-color: transparent;
+    font-size: 16px;
+    width: 100%;
+    text-align: start;
+    border-radius: 10px;
+    border: 1px solid #b7dcff;
+    cursor: pointer;
+    transition: 0.2s;
+    padding: 10px;
+}
+
+.dropdown-btn:hover {
+    border: 1px solid #2797ff;
 }

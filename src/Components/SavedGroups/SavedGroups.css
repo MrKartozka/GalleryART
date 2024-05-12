@@ -10,6 +10,7 @@
     border-radius: 30px;
     padding: 14px;
     height: 46px;
+    cursor: pointer;
 }
 
 .saved-groups__albums {
@@ -23,4 +24,39 @@
     width: 200px;
     height: 100px;
 
+}
+
+.filter__container {
+    display: flex;
+    position: relative;
+}
+
+.dropdown-filter {
+    position: absolute;
+    margin-left: 60px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 270px;
+    background-color: white;
+    border-radius: 20px;
+    padding: 10px;
+}
+
+.filter-sort {
+    font-size: 14px;
+}
+
+.filter-btn {
+    background-color: transparent;
+    width: 100%;
+    font-size: 16px;
+    text-align: start;
+    border-radius: 10px;
+    border: 1px solid #b7dcff;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.filter-btn:hover {
+    border: 1px solid #2797ff;
 }

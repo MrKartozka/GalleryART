@@ -39,7 +39,11 @@ function ProfileNavigationBar() {
 							className="profile-settings__img"
 							alt="Иконка профиля"
 						/>
-						<img src="../../../arrow-down.svg" alt="" />
+						<img
+							className="profile-setting__arrowdown"
+							src="../../../arrow-down.svg"
+							alt=""
+						/>
 					</button>
 					{dropdownState && <ModalOptions />}
 				</div>
