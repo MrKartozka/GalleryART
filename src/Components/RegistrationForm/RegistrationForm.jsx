@@ -1,37 +1,64 @@
 import React, { useState } from "react";
+import axios from "axios";
 import "./RegistrationForm.css";
+import config from "../../config";
 
 function RegistrationForm() {
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+	const [login, setLogin] = useState("");
+	const [password, setPassword] = useState("");
+	const [confirmPassword, setConfirmPassword] = useState("");
+	const [error, setError] = useState("");
 
 	// Переключает видимость пароля
 	const togglePasswordVisibility = () => {
 		setIsPasswordVisible(!isPasswordVisible);
 	};
 
+	const handleSubmit = async (e) => {
+		e.preventDefault();
+		if (password !== confirmPassword) {
+			setError("Пароли не совпадают");
+			return;
+		}
+
+		try {
+			const response = await axios.post(`${config.apiBaseUrl}/auth/reg`, {
+				login,
+				password,
+			});
+			console.log("Registration successful", response.data);
+			// Handle successful registration (e.g., redirect to login)
+		} catch (error) {
+			console.error("Error during registration", error);
+			setError("Ошибка при регистрации");
+		}
+	};
+
 	return (
 		<div className="register-container">
 			<div className="register-box">
 				<div className="register-header">Регистрация</div>
-				<form className="register-form">
-					<label htmlFor="email">Почта/Никнейм</label>
+				<form className="register-form" onSubmit={handleSubmit}>
+					{error && <div className="error">{error}</div>}
+					<label htmlFor="login">Почта/Никнейм</label>
 					<input
-						type="email"
-						id="email"
+						type="text"
+						id="login"
 						placeholder="Введите логин..."
 						className="register-form__email"
+						value={login}
+						onChange={(e) => setLogin(e.target.value)}
 					/>
 					<div className="register-form__password-field">
-						<label
-							htmlFor={isPasswordVisible ? "password" : "text"}
-						>
-							Пароль
-						</label>
+						<label htmlFor="password">Пароль</label>
 						<input
-							type={isPasswordVisible ? "password" : "text"}
+							type={isPasswordVisible ? "text" : "password"}
 							id="password"
 							placeholder="Введите пароль..."
 							className="register-form__password"
+							value={password}
+							onChange={(e) => setPassword(e.target.value)}
 						/>
 						<img
 							src={
@@ -39,21 +66,21 @@ function RegistrationForm() {
 									? "closeEye.png"
 									: "openEye.png"
 							}
-							alt="close eye"
+							alt="toggle visibility"
 							onClick={togglePasswordVisibility}
 						/>
 					</div>
 					<div className="register-form__password-field">
-						<label
-							htmlFor={isPasswordVisible ? "password" : "text"}
-						>
+						<label htmlFor="confirmPassword">
 							Подтвердите пароль
 						</label>
 						<input
-							type={isPasswordVisible ? "password" : "text"}
-							id="password"
+							type={isPasswordVisible ? "text" : "password"}
+							id="confirmPassword"
 							placeholder="Повторите пароль..."
 							className="register-form__password"
+							value={confirmPassword}
+							onChange={(e) => setConfirmPassword(e.target.value)}
 						/>
 						<img
 							src={
@@ -61,7 +88,7 @@ function RegistrationForm() {
 									? "closeEye.png"
 									: "openEye.png"
 							}
-							alt="close eye"
+							alt="toggle visibility"
 							onClick={togglePasswordVisibility}
 						/>
 					</div>

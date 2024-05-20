@@ -5,12 +5,14 @@ import ProfileNavigationBar from "./Components/ProfileNavigationBar/ProfileNavig
 import Profile from "./Components/Profile/Profile";
 import OtherProfile from "./Components/OtherProfile/OtherProfile";
 import AddPicture from "./Components/AddPicture/AddPicture";
+import RegistrationForm from "./Components/RegistrationForm/RegistrationForm";
+import LoginForm from "./Components/LoginForm/LoginForm";
 
 function App() {
 	return (
 		<>
-			<ProfileNavigationBar />
-			<Profile />
+			<LoginForm />
+			{/* <Profile /> */}
 		</>
 	);
 }
