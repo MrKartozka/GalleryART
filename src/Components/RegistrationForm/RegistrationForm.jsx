@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import "./RegistrationForm.css";
 import config from "../../config";
+import EmailConfirmation from "./EmailConfirmation";
 
 function RegistrationForm() {
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -9,8 +10,9 @@ function RegistrationForm() {
 	const [password, setPassword] = useState("");
 	const [confirmPassword, setConfirmPassword] = useState("");
 	const [error, setError] = useState("");
+	const [showModal, setShowModal] = useState(false);
+	const [token, setToken] = useState("");
 
-	// Переключает видимость пароля
 	const togglePasswordVisibility = () => {
 		setIsPasswordVisible(!isPasswordVisible);
 	};
@@ -28,7 +30,8 @@ function RegistrationForm() {
 				password,
 			});
 			console.log("Registration successful", response.data);
-			// Handle successful registration (e.g., redirect to login)
+			setToken(response.data.token);
+			setShowModal(true);
 		} catch (error) {
 			console.error("Error during registration", error);
 			setError("Ошибка при регистрации");
@@ -92,7 +95,7 @@ function RegistrationForm() {
 							onClick={togglePasswordVisibility}
 						/>
 					</div>
-					<button type="submit">Войти</button>
+					<button type="submit">Зарегистрироваться</button>
 					<div className="register-link">
 						<p>
 							Есть аккаунт ? <a href="#">Войдите в систему</a>
@@ -100,6 +103,11 @@ function RegistrationForm() {
 					</div>
 				</form>
 			</div>
+			<EmailConfirmation
+				show={showModal}
+				handleClose={() => setShowModal(false)}
+				token={token}
+			/>
 		</div>
 	);
 }

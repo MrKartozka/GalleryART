@@ -1,19 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
-import { useLocation } from "react-router-dom";
 import config from "../../config";
-// import "./EmailConfirmation.css";
+import "./EmailConfirmation.css";
 
-function EmailConfirmation() {
+function EmailConfirmation({ show, handleClose, token }) {
 	const [confirmationStatus, setConfirmationStatus] = useState("");
-	const query = new URLSearchParams(useLocation().search);
-	const token = query.get("token");
-
-	useEffect(() => {
-		if (token) {
-			confirmEmail();
-		}
-	}, [token]);
 
 	const confirmEmail = async () => {
 		try {
@@ -29,13 +20,26 @@ function EmailConfirmation() {
 		}
 	};
 
+	if (!show) {
+		return null;
+	}
+
 	return (
-		<div className="confirmation-container">
-			<div className="confirmation-box">
-				<div className="confirmation-header">
-					Подтверждение регистрации
+		<div className="modal" onClick={handleClose}>
+			<div className="modal-content" onClick={(e) => e.stopPropagation()}>
+				<div className="modal-header">
+					<h4 className="modal-title">Подтверждение регистрации</h4>
 				</div>
-				<p>{confirmationStatus}</p>
+				<div className="modal-body">
+					<p>
+						{confirmationStatus ||
+							"Пожалуйста, подтвердите ваш email, перейдя по ссылке в письме, а затем нажмите кнопку ниже."}
+					</p>
+				</div>
+				<div className="modal-footer">
+					<button onClick={confirmEmail}>Подтвердить Email</button>
+					<button onClick={handleClose}>Закрыть</button>
+				</div>
 			</div>
 		</div>
 	);
