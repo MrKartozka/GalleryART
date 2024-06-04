@@ -1,9 +1,9 @@
-import "./ProfileNavigationBar.css";
+import "./NavigationBarWithoutFind.css";
 import ModalOptions from "../ModalOptions/ModalOptions";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-function ProfileNavigationBar({ userEmail, onLogout }) {
+function NavigationBarWithoutFind({ userEmail, onLogout }) {
 	const [dropdownState, setDropdownState] = useState(false);
 	const navigate = useNavigate();
 
@@ -15,52 +15,34 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 		navigate("/gallery");
 	};
 
-	const handleCreateClick = () => {
-		navigate("/add-picture");
-	};
-
 	return (
-		<div className="profile-nav">
-			<div className="profile-nav__container">
-				<div className="profile-nav__first-box">
-					<div
-						className="profile-nav__logo"
-						onClick={handleLogoClick}
-					>
-						Gallery Art
-					</div>
-					<button
-						className="profile-nav__create-profile"
-						onClick={handleCreateClick}
-					>
-						Создать
-					</button>
+		<div className="profile-nav-wf">
+			<div className="profile-nav-wf__container">
+				<div className="profile-nav-wf__logo" onClick={handleLogoClick}>
+					Gallery Art
 				</div>
-				<div className="search-field">
-					<input type="text" placeholder="Поиск картинки" />
-				</div>
-				<div className="profile-nav__second-box">
-					<button className="profile-nav__notification-btn">
+				<div className="profile-nav-wf__box">
+					<button className="profile-nav-wf__notification-btn">
 						<img
 							src="../../../notification.svg"
 							alt="Уведомления"
 						/>
 					</button>
-					<button className="profile-nav__messages-btn">
+					<button className="profile-nav-wf__messages-btn">
 						<img src="../../../messages.svg" alt="Сообщения" />
 					</button>
-					<div className="profile-settings">
+					<div className="profile-wf-settings">
 						<button
 							className="profile-settings__btn"
 							onClick={handleDropdown}
 						>
 							<img
 								src="../../../profile.png"
-								className="profile-settings__img"
+								className="profile-wf-settings__img"
 								alt="Иконка профиля"
 							/>
 							<img
-								className="profile-setting__arrowdown"
+								className="profile-wf-setting__arrowdown"
 								src="../../../arrow-down.svg"
 								alt=""
 							/>
@@ -78,4 +60,4 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 	);
 }
 
-export default ProfileNavigationBar;
+export default NavigationBarWithoutFind;

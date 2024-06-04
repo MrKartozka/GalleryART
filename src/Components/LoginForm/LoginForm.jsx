@@ -1,15 +1,16 @@
 import React, { useState } from "react";
 import axios from "axios";
 import config from "../../config";
+import { useNavigate, Link } from "react-router-dom";
 import "./LoginForm.css";
 
-function LoginForm() {
+function LoginForm({ setIsAuthenticated, setUserEmail }) {
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 	const [login, setLogin] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
+	const navigate = useNavigate();
 
-	// Toggle password visibility
 	const togglePasswordVisibility = () => {
 		setIsPasswordVisible(!isPasswordVisible);
 	};
@@ -21,15 +22,9 @@ function LoginForm() {
 		console.log("Login URL:", url);
 
 		try {
-			// Debugging: Log the payload
-			console.log("Payload:", { login, password });
-
 			const response = await axios.post(
 				url,
-				{
-					login, // Use 'login' if that's what your backend expects
-					password,
-				},
+				{ login, password },
 				{
 					headers: {
 						"Content-Type": "application/json",
@@ -40,26 +35,17 @@ function LoginForm() {
 
 			console.log("Login successful", response.data);
 
-			// Store the JWT tokens
 			const accessToken = response.data.accessToken;
 			const refreshToken = response.data.refreshToken;
 			localStorage.setItem("accessToken", accessToken);
 			localStorage.setItem("refreshToken", refreshToken);
+			localStorage.setItem("userEmail", login);
 
-			// Optionally, verify the user by calling a protected endpoint
-			const userResponse = await axios.get(
-				`${config.apiBaseUrl}/auth/logged-user`,
-				{
-					headers: {
-						Authorization: `Bearer ${accessToken}`,
-					},
-				}
-			);
-			console.log("User data:", userResponse.data);
+			setIsAuthenticated(true);
+			setUserEmail(login);
 
-			// Handle successful login (e.g., redirect to dashboard)
+			navigate("/gallery");
 		} catch (error) {
-			// Debugging: Log the error
 			console.error("Error during login", error);
 			setError("Ошибка при входе");
 		}
@@ -68,6 +54,14 @@ function LoginForm() {
 	return (
 		<div className="login-container">
 			<div className="login-box">
+				<Link to="/gallery">
+					<img
+						className="login-back"
+						src="https://upload.wikimedia.org/wikipedia/commons/thumb/a/a2/Iconoir_arrow-left-circled.svg/1200px-Iconoir_arrow-left-circled.svg.png"
+						alt=""
+						width="32"
+					/>
+				</Link>
 				<img src="blackGuy.png" alt="" className="login-character" />
 				<div className="login-header">Вход в систему</div>
 				<form className="login-form" onSubmit={handleSubmit}>
@@ -113,7 +107,8 @@ function LoginForm() {
 					<button type="submit">Войти</button>
 					<div className="register-link">
 						<p>
-							Нет аккаунта ? <a href="#">Зарегистрируйтесь</a>
+							Нет аккаунта ?{" "}
+							<a href="/register">Зарегистрируйтесь</a>
 						</p>
 					</div>
 				</form>

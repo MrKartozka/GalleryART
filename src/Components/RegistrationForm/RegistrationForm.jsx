@@ -3,6 +3,7 @@ import axios from "axios";
 import "./RegistrationForm.css";
 import config from "../../config";
 import EmailConfirmation from "./EmailConfirmation";
+import { useNavigate } from "react-router-dom";
 
 function RegistrationForm() {
 	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
@@ -12,6 +13,7 @@ function RegistrationForm() {
 	const [error, setError] = useState("");
 	const [showModal, setShowModal] = useState(false);
 	const [token, setToken] = useState("");
+	const navigate = useNavigate();
 
 	const togglePasswordVisibility = () => {
 		setIsPasswordVisible(!isPasswordVisible);
@@ -36,6 +38,11 @@ function RegistrationForm() {
 			console.error("Error during registration", error);
 			setError("Ошибка при регистрации");
 		}
+	};
+
+	const handleEmailConfirmationClose = () => {
+		setShowModal(false);
+		navigate("/login");
 	};
 
 	return (
@@ -98,14 +105,15 @@ function RegistrationForm() {
 					<button type="submit">Зарегистрироваться</button>
 					<div className="register-link">
 						<p>
-							Есть аккаунт ? <a href="#">Войдите в систему</a>
+							Есть аккаунт ?{" "}
+							<a href="/login">Войдите в систему</a>
 						</p>
 					</div>
 				</form>
 			</div>
 			<EmailConfirmation
 				show={showModal}
-				handleClose={() => setShowModal(false)}
+				handleClose={handleEmailConfirmationClose}
 				token={token}
 			/>
 		</div>

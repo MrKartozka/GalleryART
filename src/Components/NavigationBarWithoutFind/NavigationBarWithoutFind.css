@@ -1,0 +1,64 @@
+.profile-nav-wf {
+    background-color: #D9D9D9;
+}
+
+.profile-nav-wf__logo {
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.profile-nav-wf__logo:hover {
+    transition: 0.4s;
+    color: red;
+}
+
+.profile-nav-wf__container {
+    padding: 10px 20px;
+    margin: 0 auto;
+    flex-wrap: wrap;
+    width: 98dvw;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.profile-nav-wf__create-profile {
+    border: none;
+    background-color: white;
+    border-radius: 20px;
+    padding: 10px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.profile-nav-wf__box {
+    display: flex;
+    gap: 30px;
+}
+
+.profile-nav-wf__create-profile:hover {
+    background-color: bisque;
+    transition: 0.4s;
+}
+
+.profile-nav-wf__notification-btn,
+.profile-nav-wf__messages-btn {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.profile-wf-settings__btn {
+    width: 50px;
+    background-color: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+.profile-wf-settings__img {
+    border-radius: 50%;
+    border: 1px solid black;
+}

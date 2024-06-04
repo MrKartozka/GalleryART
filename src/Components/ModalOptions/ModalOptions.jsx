@@ -1,20 +1,39 @@
+import React from "react";
 import "./ModalOptions.css";
+import { useNavigate } from "react-router-dom";
 
-function ModalOptions() {
+function ModalOptions({ userEmail, onLogout }) {
+	const navigate = useNavigate();
+
+	const handleProfileClick = () => {
+		navigate("/profile");
+	};
+	const handleSettingsClick = () => {
+		navigate("/settings");
+	};
+
 	return (
 		<div className="dropdown">
-			<div className="dropwdown__profile-info">
+			<button
+				className="dropdown__profile-info"
+				onClick={handleProfileClick}
+			>
 				<div className="dropdown__avatar">
 					<img src="big-profile.png" alt="" width="64px" />
 				</div>
 				<div className="dropdown__texts">
 					<div className="dropdown__nickname">Artman81</div>
-					<div className="dropdown__email">Artman81@gmail.com</div>
+					<div className="dropdown__email">{userEmail}</div>
 				</div>
-			</div>
+			</button>
 			<ul className="dropdown-list">
 				<li>
-					<button className="dropdown-btn">Настройки</button>
+					<button
+						className="dropdown-btn"
+						onClick={handleSettingsClick}
+					>
+						Настройки
+					</button>
 				</li>
 				<li>
 					<button className="dropdown-btn">
@@ -32,7 +51,9 @@ function ModalOptions() {
 					</button>
 				</li>
 				<li>
-					<button className="dropdown-btn">Выход</button>
+					<button className="dropdown-btn" onClick={onLogout}>
+						Выход
+					</button>
 				</li>
 			</ul>
 		</div>

@@ -20,6 +20,10 @@
     pointer-events: none;
 }
 
+.login-back {
+    position: absolute;
+}
+
 .login-box {
     position: relative;
     margin: 0 auto;
@@ -153,4 +157,9 @@
 .forgot-password {
     text-decoration: none;
     color: #4D4D4D;
+}
+
+.error {
+    color: red;
+    margin-bottom: 10px;
 }

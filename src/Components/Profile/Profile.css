@@ -4,10 +4,10 @@
 }
 
 .profile-info__logo button {
-    padding: 14px;
+    padding: 12px;
     border-radius: 20px;
     border: none;
-    background-color: #D9D9D9;
+    text-align: center;
 }
 
 .profile-info__buttons {
@@ -16,6 +16,18 @@
     justify-content: center;
     gap: 10px;
     margin-bottom: 50px;
+    margin-top: 20px;
+}
+
+.profile-info-button {
+    background-color: #D9D9D9;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.profile-info-button:hover {
+    background-color: bisque;
+    transition: 0.4s;
 }
 
 .profile-menu {

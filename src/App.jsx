@@ -1,19 +1,37 @@
-// import RegistrationForm from "./RegistrationForm/RegistrationForm";
-import NavigationBar from "./Components/NavigationBar/NavigationBar";
-import GalleryList from "./Components/GalleryList/GalleryList";
-import ProfileNavigationBar from "./Components/ProfileNavigationBar/ProfileNavigationBar";
-import Profile from "./Components/Profile/Profile";
-import OtherProfile from "./Components/OtherProfile/OtherProfile";
-import AddPicture from "./Components/AddPicture/AddPicture";
-import RegistrationForm from "./Components/RegistrationForm/RegistrationForm";
-import LoginForm from "./Components/LoginForm/LoginForm";
+import React, { useState, useEffect } from "react";
+import { BrowserRouter as Router } from "react-router-dom";
+import AppRouter from "./AppRouter";
 
 function App() {
+	const [isAuthenticated, setIsAuthenticated] = useState(false);
+	const [userEmail, setUserEmail] = useState("");
+
+	useEffect(() => {
+		const accessToken = localStorage.getItem("accessToken");
+		if (accessToken) {
+			setIsAuthenticated(true);
+			setUserEmail(localStorage.getItem("userEmail"));
+		}
+	}, []);
+
+	const handleLogout = () => {
+		localStorage.removeItem("accessToken");
+		localStorage.removeItem("refreshToken");
+		localStorage.removeItem("userEmail");
+		setIsAuthenticated(false);
+		setUserEmail("");
+	};
+
 	return (
-		<>
-			<RegistrationForm />
-			{/* <Profile /> */}
-		</>
+		<Router>
+			<AppRouter
+				isAuthenticated={isAuthenticated}
+				setIsAuthenticated={setIsAuthenticated}
+				setUserEmail={setUserEmail}
+				userEmail={userEmail}
+				handleLogout={handleLogout}
+			/>
+		</Router>
 	);
 }
 

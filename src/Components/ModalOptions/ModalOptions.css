@@ -19,13 +19,24 @@ li {
     padding: 5px 0;
 }
 
-.dropwdown__profile-info {
+.dropdown__profile-info {
+    border: none;
+    width: 100%;
+    outline: none;
     padding: 20px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     gap: 10px;
     margin-bottom: 10px;
+    cursor: pointer;
+    background-color: white;
+    transition: 0.2s ease-in-out;
+    border-radius: 20px;
+}
+
+.dropdown__profile-info:hover {
+    background-color: #e0f0ff;
 }
 
 .dropdown-btn {
