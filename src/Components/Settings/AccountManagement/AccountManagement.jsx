@@ -15,15 +15,19 @@ function AccountManagement() {
 								Изменение профиля
 							</button>
 						</Link>
-						<button className="manage-settings__list-button manage-btn">
-							Управление аккаунтом
-						</button>
-						<button className="manage-settings__list-button visibility-btn">
-							Видимость профиля
-						</button>
-						<button className="manage-settings__list-button safe-btn">
+						<Link to="/account-management">
+							<button className="manage-settings__list-button manage-btn">
+								Управление аккаунтом
+							</button>
+						</Link>
+						<Link to="/profile-visibility">
+							<button className="manage-settings__list-button visibility-btn">
+								Видимость профиля
+							</button>
+						</Link>
+						{/* <button className="manage-settings__list-button safe-btn">
 							Безопасность
-						</button>
+						</button> */}
 					</div>
 					<div className="manage-settings__profile">
 						<div className="manage-settings__texts">
@@ -48,7 +52,7 @@ function AccountManagement() {
 									<input
 										type="text"
 										id="manage-settings-email"
-										placeholder='"Почта"'
+										placeholder='"почта"'
 										className="manage-settings-email-input email-change"
 									/>
 								</label>
@@ -66,9 +70,18 @@ function AccountManagement() {
 								>
 									Сменить пароль
 								</button>
+								<button
+									type="submit"
+									className="manage-settings__profile-submit-btn"
+								>
+									Сохранить
+								</button>
 							</form>
 						</div>
 						<div className="manage-settings__profile-deactivate-and-delete">
+							<h2 className="manage-settings__profile-deactivate-and-delete-title">
+								Деактивация и удаление
+							</h2>
 							<div className="manage-settings__profile-deactivate">
 								<p className="manage-settings__profile-deactivate-title">
 									Отключить аккаунт
@@ -84,7 +97,9 @@ function AccountManagement() {
 								</div>
 							</div>
 							<div className="manage-settings__profile-delete">
-								<p>Удаление данных и аккаунта</p>
+								<p className="manage-settings__profile-delete-title">
+									Удаление данных и аккаунта
+								</p>
 								<div className="manage-settings__profile-delete-off">
 									<p className="manage-settings__profile-off-delete-text">
 										Безвозвратное удаление данных и всего,
@@ -96,12 +111,6 @@ function AccountManagement() {
 								</div>
 							</div>
 						</div>
-						<button
-							type="submit"
-							className="manage-settings__profile-submit-btn"
-						>
-							Сохранить
-						</button>
 					</div>
 				</div>
 			</div>

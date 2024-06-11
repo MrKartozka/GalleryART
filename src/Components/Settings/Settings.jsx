@@ -10,17 +10,21 @@ function Settings() {
 			<div className="settings">
 				<div className="settings__container">
 					<div className="settings__list">
-						<button className="settings__list-button edit-btn">
-							Изменение профиля
-						</button>
+						<Link to="/settings">
+							<button className="settings__list-button edit-btn">
+								Изменение профиля
+							</button>
+						</Link>
 						<Link to="/account-management">
 							<button className="settings__list-button manage-btn">
 								Управление аккаунтом
 							</button>
 						</Link>
-						<button className="settings__list-button visibility-btn">
-							Видимость профиля
-						</button>
+						<Link to="/profile-visibility">
+							<button className="settings__list-button visibility-btn">
+								Видимость профиля
+							</button>
+						</Link>
 						<button className="settings__list-button safe-btn">
 							Безопасность
 						</button>

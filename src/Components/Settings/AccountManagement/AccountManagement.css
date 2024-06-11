@@ -5,7 +5,7 @@ body {
 .manage-settings__container {
     display: flex;
     padding: 43px;
-    gap: 30%;
+    gap: 20%;
 }
 
 .manage-settings__list {
@@ -122,12 +122,13 @@ body {
     padding: 10px 20px;
     border-radius: 15px;
     cursor: pointer;
-    margin-top: 20px;
+    margin: 0 auto 20px;
     transition: 0.4s;
 }
 
 .manage-settings__profile-submit-btn:hover {
     background-color: red;
+    color: white;
     transition: 0.4s;
 }
 
@@ -142,6 +143,44 @@ body {
 }
 
 .manage-settings__profile-change-password:hover {
-    transition: 0.4s;
     color: red;
+}
+
+.manage-settings__profile-deactivate-off,
+.manage-settings__profile-delete-off {
+    width: 100%;
+    display: flex;
+    margin-bottom: 20px;
+    justify-content: space-between;
+}
+
+.manage-settings__profile-deactivate-off-text,
+.manage-settings__profile-off-delete-text {
+    max-width: 300px;
+}
+
+.manage-settings__profile-deactivate-off-btn,
+.manage-settings__profile-delete-off-btn {
+    border-radius: 20px;
+    padding: 10px;
+    max-height: 45px;
+    border: none;
+    background-color: #D9D9D9;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.manage-settings__profile-deactivate-and-delete-title {
+    margin-bottom: 20px;
+}
+
+.manage-settings__profile-deactivate-title,
+.manage-settings__profile-delete-title {
+    margin-bottom: 10px;
+}
+
+.manage-settings__profile-deactivate-off-btn:hover,
+.manage-settings__profile-delete-off-btn:hover {
+    background-color: red;
+    color: white;
 }

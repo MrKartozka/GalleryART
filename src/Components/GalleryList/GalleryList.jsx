@@ -5,6 +5,7 @@ import NavigationBar from "./../NavigationBar/NavigationBar";
 
 function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 	const url = `${config.apiBaseUrl}/image/default/20240502214901.jpg`;
+	console.log(url);
 	return (
 		<>
 			{isAuthenticated ? (

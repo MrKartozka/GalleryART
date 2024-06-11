@@ -7,6 +7,7 @@ import GalleryList from "./Components/GalleryList/GalleryList";
 import AddPicture from "./Components/AddPicture/AddPicture";
 import Settings from "./Components/Settings/Settings";
 import AccountManagement from "./Components/Settings/AccountManagement/AccountManagement";
+import ProfileVisibility from "./Components/Settings/ProfileVisibility/ProfileVisibility";
 
 function AppRouter({
 	isAuthenticated,
@@ -96,6 +97,16 @@ function AppRouter({
 				element={
 					isAuthenticated ? (
 						<AccountManagement />
+					) : (
+						<Navigate to="/login" />
+					)
+				}
+			/>
+			<Route
+				path="/profile-visibility"
+				element={
+					isAuthenticated ? (
+						<ProfileVisibility />
 					) : (
 						<Navigate to="/login" />
 					)

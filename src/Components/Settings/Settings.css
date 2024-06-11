@@ -5,7 +5,7 @@ body {
 .settings__container {
     display: flex;
     padding: 43px;
-    gap: 30%;
+    gap: 20%;
 }
 
 .settings__list {
