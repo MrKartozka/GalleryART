@@ -35,9 +35,9 @@
     gap: 30px;
 }
 
-.search-field {
+/* .search-field {
     padding: 30px;
-}
+} */
 
 .search-field input {
     padding: 5px;
@@ -58,8 +58,9 @@
 }
 
 .profile-nav__create-profile:hover {
-    background-color: bisque;
+    background-color: rgba(255, 0, 0, 0.89);
     transition: 0.4s;
+    color: white;
 }
 
 .profile-nav__notification-btn,

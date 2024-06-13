@@ -15,6 +15,7 @@ function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 			) : (
 				<NavigationBar isAuthenticated={isAuthenticated} />
 			)}
+
 			<div className="grid-container">
 				<div className="grid-item">
 					<img src={url} alt="" />

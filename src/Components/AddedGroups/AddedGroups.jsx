@@ -1,20 +1,32 @@
-import React, { useState } from "react";
+import React from "react";
 import "./AddedGroups.css";
+import config from "../../config";
 
-const AddedGroups = ({ posts = [] }) => {
+const AddedGroups = ({ posts = [], onPostClick }) => {
+	const getImageUrl = (fullFilename) => {
+		const filenameParts = fullFilename.split("/");
+		const bucketName = filenameParts[0];
+		const keyName = filenameParts.slice(1).join("/");
+		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`;
+	};
+
 	return (
-		<div className="added-groups">
+		<div className="grid-container-groups">
 			{posts.map((post, index) => (
-				<div key={index} className="post">
-					<h3>{post.title}</h3>
-					<p>{post.description}</p>
-					{post.images.map((image, imgIndex) => (
+				<div
+					key={index}
+					className="grid-item-groups"
+					onClick={() => onPostClick(post)}
+				>
+					<div className="image-container-groups">
 						<img
-							key={imgIndex}
-							src={image.fullFilename}
+							src={getImageUrl(post.images[0]?.fullFilename)}
 							alt={post.title}
 						/>
-					))}
+						<div className="overlay-groups">
+							<div className="text-groups">{post.title}</div>
+						</div>
+					</div>
 				</div>
 			))}
 		</div>

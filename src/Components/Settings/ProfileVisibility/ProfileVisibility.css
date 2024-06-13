@@ -127,8 +127,9 @@ body {
 }
 
 .visibility-settings__profile-privacy-btn:hover {
-    background-color: red;
+    background-color: rgba(255, 0, 0, 0.89);
     transition: 0.4s;
+    color: white;
 }
 
 .visibility-settings__profile-change-password {

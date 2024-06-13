@@ -8,6 +8,7 @@ import AddPicture from "./Components/AddPicture/AddPicture";
 import Settings from "./Components/Settings/Settings";
 import AccountManagement from "./Components/Settings/AccountManagement/AccountManagement";
 import ProfileVisibility from "./Components/Settings/ProfileVisibility/ProfileVisibility";
+import PostDetail from "./Components/PostDetail/PostDetail";
 
 function AppRouter({
 	isAuthenticated,
@@ -109,6 +110,16 @@ function AppRouter({
 				element={
 					isAuthenticated ? (
 						<ProfileVisibility {...sharedProps} />
+					) : (
+						<Navigate to="/login" />
+					)
+				}
+			/>
+			<Route
+				path="profile/detail/:postId"
+				element={
+					isAuthenticated ? (
+						<PostDetail {...sharedProps} />
 					) : (
 						<Navigate to="/login" />
 					)

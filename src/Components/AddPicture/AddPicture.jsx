@@ -1,6 +1,6 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./AddPicture.css";
-import ProfileNavigationBar from "../ProfileNavigationBar/ProfileNavigationBar";
 import Dropzone from "react-dropzone";
 import config from "../../config";
 import NavigationBarWithoutFind from "../NavigationBarWithoutFind/NavigationBarWithoutFind";
@@ -13,6 +13,7 @@ const AddPicture = ({ userEmail, onLogout }) => {
 	const [groupName, setGroupName] = useState("");
 	const [tags, setTags] = useState("");
 	const [posts, setPosts] = useState([]);
+	const navigate = useNavigate();
 
 	const handleUpload = (acceptedFiles) => {
 		console.log("logging drop/selected file", acceptedFiles);
@@ -35,7 +36,7 @@ const AddPicture = ({ userEmail, onLogout }) => {
 			});
 	};
 
-	const handleAddPicture = () => {
+	const handleAddPicture = async () => {
 		if (!imageId) {
 			console.error("Image ID is missing. Cannot create post.");
 			return;
@@ -50,35 +51,35 @@ const AddPicture = ({ userEmail, onLogout }) => {
 			images: [
 				{
 					id: imageId,
-					previewFilename: file,
-					fullFilename: file,
 				},
 			],
 		};
 
-		const accessToken = localStorage.getItem("accessToken"); // Получение токена из localStorage
+		console.log("Creating post with data:", pictureData);
 
-		fetch(`${config.apiBaseUrl}/posts`, {
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${accessToken}`, // Добавление токена в заголовок запроса
-			},
-			body: JSON.stringify(pictureData),
-		})
-			.then((response) => {
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
-				}
-				return response.json();
-			})
-			.then((data) => {
-				console.log("Successfully created post:", data);
-				setPosts([...posts, data]); // Обновление списка постов в интерфейсе
-			})
-			.catch((error) => {
-				console.error("Error creating post:", error);
+		const accessToken = localStorage.getItem("accessToken");
+
+		try {
+			const response = await fetch(`${config.apiBaseUrl}/posts`, {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${accessToken}`,
+				},
+				body: JSON.stringify(pictureData),
 			});
+
+			if (!response.ok) {
+				throw new Error(`HTTP error! status: ${response.status}`);
+			}
+
+			const data = await response.json();
+			console.log("Successfully created post:", data);
+			setPosts([...posts, data]);
+			navigate("/profile");
+		} catch (error) {
+			console.error("Error creating post:", error);
+		}
 	};
 
 	return (

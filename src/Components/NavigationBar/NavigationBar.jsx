@@ -6,7 +6,11 @@ function NavigationBar({ isAuthenticated }) {
 		<div className="nav">
 			<div className="nav-container">
 				<div className="nav__logo">Gallery Art</div>
-				<div className="search-field">
+				<div
+					className={`search-field ${
+						isAuthenticated ? "centered" : ""
+					}`}
+				>
 					<input
 						type="text"
 						name=""
@@ -14,14 +18,13 @@ function NavigationBar({ isAuthenticated }) {
 						placeholder="Поиск картинки"
 					/>
 				</div>
-				<img src="" alt="" />
+				{isAuthenticated && <img src="" alt="" />}
 				{!isAuthenticated && (
 					<Link to="/login">
 						<button className="nav-login">Вход</button>
 					</Link>
 				)}
 			</div>
-			<h2 className="nav__title">Просмотрите изображения на ваш вкус</h2>
 		</div>
 	);
 }

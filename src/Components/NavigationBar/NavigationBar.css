@@ -6,13 +6,26 @@
     margin: 0 auto;
     flex-wrap: wrap;
     width: 90dvw;
-    padding: 30px 0 0;
+    padding: 10px 0 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    padding-bottom: 10px;
+}
+
+.search-field {
+
+    flex: 1;
+    display: flex;
+    justify-content: center;
+}
+
+.search-field.centered {
+    justify-content: center;
 }
 
 .search-field input {
+    border: 1px solid black;
     padding: 5px;
     border-radius: 20px;
     width: 40dvw;
@@ -22,9 +35,18 @@
 }
 
 .nav-login {
+    background-color: rgb(19, 19, 19);
+    color: white;
+    border: none;
     border-radius: 20px;
     width: 55px;
     padding: 5px;
+}
+
+.nav-login:hover {
+    background-color: rgba(255, 0, 0, 0.89);
+    transition: 0.4s;
+    color: white;
 }
 
 .nav__title {

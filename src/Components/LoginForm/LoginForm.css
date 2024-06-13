@@ -123,7 +123,9 @@
 }
 
 .login-form button:hover {
-    background-color: #FD4B4B;
+    background-color: red;
+    transition: 0.4s;
+    color: white;
 }
 
 .register-link {
