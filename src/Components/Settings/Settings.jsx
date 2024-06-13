@@ -3,10 +3,13 @@ import "./Settings.css";
 import { Link } from "react-router-dom";
 import NavigationBarWithoutFind from "../NavigationBarWithoutFind/NavigationBarWithoutFind";
 
-function Settings() {
+function Settings({ userEmail, onLogout }) {
 	return (
 		<>
-			<NavigationBarWithoutFind />
+			<NavigationBarWithoutFind
+				userEmail={userEmail}
+				onLogout={onLogout}
+			/>
 			<div className="settings">
 				<div className="settings__container">
 					<div className="settings__list">

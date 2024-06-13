@@ -18,6 +18,12 @@ function AppRouter({
 }) {
 	const location = useLocation();
 
+	const sharedProps = {
+		userEmail,
+		onLogout: handleLogout,
+		isAuthenticated,
+	};
+
 	useEffect(() => {
 		localStorage.setItem("lastPath", location.pathname);
 	}, [location]);
@@ -61,42 +67,38 @@ function AppRouter({
 				path="/profile"
 				element={
 					isAuthenticated ? (
-						<Profile
-							userEmail={userEmail}
-							onLogout={handleLogout}
-						/>
+						<Profile {...sharedProps} />
+					) : (
+						<Navigate to="/login" />
+					)
+				}
+			/>
+			<Route path="/gallery" element={<GalleryList {...sharedProps} />} />
+			<Route
+				path="/add-picture"
+				element={
+					isAuthenticated ? (
+						<AddPicture {...sharedProps} />
 					) : (
 						<Navigate to="/login" />
 					)
 				}
 			/>
 			<Route
-				path="/gallery"
-				element={
-					<GalleryList
-						userEmail={userEmail}
-						onLogout={handleLogout}
-						isAuthenticated={isAuthenticated}
-					/>
-				}
-			/>
-			<Route
-				path="/add-picture"
-				element={
-					isAuthenticated ? <AddPicture /> : <Navigate to="/login" />
-				}
-			/>
-			<Route
 				path="/settings"
 				element={
-					isAuthenticated ? <Settings /> : <Navigate to="/login" />
+					isAuthenticated ? (
+						<Settings {...sharedProps} />
+					) : (
+						<Navigate to="/login" />
+					)
 				}
 			/>
 			<Route
 				path="/account-management"
 				element={
 					isAuthenticated ? (
-						<AccountManagement />
+						<AccountManagement {...sharedProps} />
 					) : (
 						<Navigate to="/login" />
 					)
@@ -106,7 +108,7 @@ function AppRouter({
 				path="/profile-visibility"
 				element={
 					isAuthenticated ? (
-						<ProfileVisibility />
+						<ProfileVisibility {...sharedProps} />
 					) : (
 						<Navigate to="/login" />
 					)
