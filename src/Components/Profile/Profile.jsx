@@ -2,7 +2,6 @@ import React, { useEffect, useState } from "react";
 import UserGroups from "../UserGroups/UserGroups";
 import "./Profile.css";
 import NavigationBarWithoutFind from "../NavigationBarWithoutFind/NavigationBarWithoutFind";
-import AddedGroups from "../AddedGroups/AddedGroups";
 import PostDetail from "../PostDetail/PostDetail";
 import config from "../../config";
 
@@ -75,6 +74,16 @@ const Profile = ({ userEmail, onLogout }) => {
 		setSelectedPost(null);
 	};
 
+	const getProfilePictureUrl = () => {
+		const profilePicture = localStorage.getItem("profilePicture");
+		if (!profilePicture) return "../../../big-profile.png";
+
+		const filenameParts = profilePicture.split("/");
+		const bucketName = filenameParts[0];
+		const keyName = filenameParts.slice(1).join("/");
+		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`;
+	};
+
 	return (
 		<>
 			<NavigationBarWithoutFind
@@ -86,7 +95,11 @@ const Profile = ({ userEmail, onLogout }) => {
 			) : (
 				<div className="profile-container">
 					<div className="profile-info__logo">
-						<img src="../../../big-profile.png" alt="" />
+						<img
+							src={getProfilePictureUrl()}
+							alt=""
+							style={{ borderRadius: "50%" }}
+						/>
 						<h3 className="profile-info-name">Автор</h3>
 						<p className="profile-info-email">{userEmail}</p>
 						<p className="profile-info-subscribes">0 подписок</p>
@@ -107,7 +120,11 @@ const Profile = ({ userEmail, onLogout }) => {
 							Сохраненные
 						</button>
 					</div>
-					<AddedGroups posts={posts} onPostClick={handlePostClick} />
+					<UserGroups
+						group={currentGroup}
+						posts={posts}
+						onPostClick={handlePostClick}
+					/>
 					{loading && <p>Загрузка...</p>}
 				</div>
 			)}

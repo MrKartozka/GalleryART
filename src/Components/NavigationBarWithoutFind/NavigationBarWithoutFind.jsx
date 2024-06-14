@@ -2,6 +2,7 @@ import "./NavigationBarWithoutFind.css";
 import ModalOptions from "../ModalOptions/ModalOptions";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import config from "../../config";
 
 function NavigationBarWithoutFind({ userEmail, onLogout }) {
 	const [dropdownState, setDropdownState] = useState(false);
@@ -13,6 +14,16 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 
 	const handleLogoClick = () => {
 		navigate("/gallery");
+	};
+
+	const getProfilePictureUrl = () => {
+		const profilePicture = localStorage.getItem("profilePicture");
+		if (!profilePicture) return "../../../profile.png";
+
+		const filenameParts = profilePicture.split("/");
+		const bucketName = filenameParts[0];
+		const keyName = filenameParts.slice(1).join("/");
+		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`;
 	};
 
 	return (
@@ -37,7 +48,7 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 							onClick={handleDropdown}
 						>
 							<img
-								src="../../../profile.png"
+								src={getProfilePictureUrl()}
 								className="profile-wf-settings__img"
 								alt="Иконка профиля"
 							/>

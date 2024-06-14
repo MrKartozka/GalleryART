@@ -62,3 +62,10 @@
     border-radius: 50%;
     border: 1px solid black;
 }
+
+.profile-wf-settings__img {
+    border-radius: 50%;
+    width: 26px;
+    height: 26px;
+    object-fit: cover;
+}

@@ -2,6 +2,7 @@ import "./ProfileNavigationBar.css";
 import ModalOptions from "../ModalOptions/ModalOptions";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import config from "../../config";
 
 function ProfileNavigationBar({ userEmail, onLogout }) {
 	const [dropdownState, setDropdownState] = useState(false);
@@ -17,6 +18,16 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 
 	const handleCreateClick = () => {
 		navigate("/add-picture");
+	};
+
+	const getProfilePictureUrl = () => {
+		const profilePicture = localStorage.getItem("profilePicture");
+		if (!profilePicture) return "../../../profile.png";
+
+		const filenameParts = profilePicture.split("/");
+		const bucketName = filenameParts[0];
+		const keyName = filenameParts.slice(1).join("/");
+		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`;
 	};
 
 	return (
@@ -55,9 +66,14 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 							onClick={handleDropdown}
 						>
 							<img
-								src="../../../profile.png"
+								src={getProfilePictureUrl()}
 								className="profile-settings__img"
 								alt="Иконка профиля"
+								style={{
+									borderRadius: "50%",
+									width: "32px",
+									height: "32px",
+								}}
 							/>
 							<img
 								className="profile-setting__arrowdown"

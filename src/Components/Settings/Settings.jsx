@@ -1,9 +1,88 @@
-import { React } from "react";
+import React, { useState } from "react";
 import "./Settings.css";
 import { Link } from "react-router-dom";
 import NavigationBarWithoutFind from "../NavigationBarWithoutFind/NavigationBarWithoutFind";
+import Dropzone from "react-dropzone";
+import config from "../../config";
 
 function Settings({ userEmail, onLogout }) {
+	const [file, setFile] = useState(null);
+	const [imageId, setImageId] = useState(null);
+
+	const handleUpload = (acceptedFiles) => {
+		setFile(URL.createObjectURL(acceptedFiles[0]));
+
+		const formData = new FormData();
+		formData.append("file", acceptedFiles[0]);
+
+		fetch(config.uploadImageUrl, {
+			method: "POST",
+			body: formData,
+		})
+			.then((response) => response.json())
+			.then((data) => {
+				console.log("Upload success:", data);
+				setImageId(data.id);
+			})
+			.catch((error) => {
+				console.error("Error uploading file:", error);
+			});
+	};
+
+	const handleSave = () => {
+		if (!imageId) {
+			console.error(
+				"Image ID is missing. Cannot update profile picture."
+			);
+			return;
+		}
+
+		const accessToken = localStorage.getItem("accessToken");
+
+		fetch(`${config.apiBaseUrl}/user/append-image?imageId=${imageId}`, {
+			method: "PUT",
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+		})
+			.then((response) => {
+				if (!response.ok) {
+					throw new Error(`HTTP error! status: ${response.status}`);
+				}
+				return response.json();
+			})
+			.then((data) => {
+				console.log("Update success:", data);
+				if (data.image && data.image.fullFilename) {
+					localStorage.setItem(
+						"profilePicture",
+						data.image.fullFilename
+					);
+					window.location.reload();
+				} else {
+					console.error("Image update failed:", data);
+				}
+			})
+			.catch((error) => {
+				console.error("Error updating profile picture:", error);
+			});
+	};
+
+	const handleReset = () => {
+		localStorage.removeItem("profilePicture");
+		window.location.reload();
+	};
+
+	const getProfilePictureUrl = () => {
+		const profilePicture = localStorage.getItem("profilePicture");
+		if (!profilePicture) return "big-profile.png";
+
+		const filenameParts = profilePicture.split("/");
+		const bucketName = filenameParts[0];
+		const keyName = filenameParts.slice(1).join("/");
+		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`;
+	};
+
 	return (
 		<>
 			<NavigationBarWithoutFind
@@ -50,17 +129,25 @@ function Settings({ userEmail, onLogout }) {
 							<div className="settings__profile-edit-box">
 								<img
 									className="settings__profile-edit-box-avatar"
-									src="big-profile.png"
+									src={file || getProfilePictureUrl()}
 									alt=""
 									width="50px"
 								/>
-								<button className="settings__profile-edit-box-change-btn">
-									Изменить
-								</button>
+								<Dropzone onDrop={handleUpload}>
+									{({ getRootProps, getInputProps }) => (
+										<button
+											{...getRootProps()}
+											className="settings__profile-edit-box-change-btn"
+										>
+											<input {...getInputProps()} />
+											Изменить
+										</button>
+									)}
+								</Dropzone>
 							</div>
 						</div>
 						<div className="settings__profile-box">
-							<form action="" class="settings__profile-form">
+							<form action="" className="settings__profile-form">
 								<label htmlFor="settings-change">
 									Имя пользователя
 									<input
@@ -92,10 +179,18 @@ function Settings({ userEmail, onLogout }) {
 									/>
 								</label>
 								<button
-									type="submit"
+									type="button"
 									className="settings__profile-submit-btn"
+									onClick={handleSave}
 								>
 									Сохранить
+								</button>
+								<button
+									type="button"
+									className="settings__profile-submit-btn"
+									onClick={handleReset}
+								>
+									Сброс
 								</button>
 							</form>
 						</div>
