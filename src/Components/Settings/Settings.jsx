@@ -8,6 +8,8 @@ import config from "../../config";
 function Settings({ userEmail, onLogout }) {
 	const [file, setFile] = useState(null);
 	const [imageId, setImageId] = useState(null);
+	const [username, setUsername] = useState("");
+	const [description, setDescription] = useState("");
 
 	const handleUpload = (acceptedFiles) => {
 		setFile(URL.createObjectURL(acceptedFiles[0]));
@@ -39,11 +41,19 @@ function Settings({ userEmail, onLogout }) {
 
 		const accessToken = localStorage.getItem("accessToken");
 
-		fetch(`${config.apiBaseUrl}/user/append-image?imageId=${imageId}`, {
+		const payload = {
+			name: username || "defaultName", // Устанавливаем значение по умолчанию, если поле пустое
+			imageId: imageId,
+			description: description || "defaultDescription", // Устанавливаем значение по умолчанию, если поле пустое
+		};
+
+		fetch(`${config.apiBaseUrl}/user/update`, {
 			method: "PUT",
 			headers: {
+				"Content-Type": "application/json",
 				Authorization: `Bearer ${accessToken}`,
 			},
+			body: JSON.stringify(payload),
 		})
 			.then((response) => {
 				if (!response.ok) {
@@ -60,7 +70,7 @@ function Settings({ userEmail, onLogout }) {
 					);
 					window.location.reload();
 				} else {
-					console.error("Image update failed:", data);
+					console.error("Profile update failed:", data);
 				}
 			})
 			.catch((error) => {
@@ -155,6 +165,10 @@ function Settings({ userEmail, onLogout }) {
 										id="settings-change"
 										placeholder='"Никнейм"'
 										className="settings-description-input input-change"
+										value={username}
+										onChange={(e) =>
+											setUsername(e.target.value)
+										}
 									/>
 									<p className="settings-change-footer">
 										www.galleryart.ru/никнейм
@@ -167,6 +181,10 @@ function Settings({ userEmail, onLogout }) {
 										id="settings-description"
 										placeholder="Описание вашего чего-то"
 										className="settings-description-input input-descr"
+										value={description}
+										onChange={(e) =>
+											setDescription(e.target.value)
+										}
 									></textarea>
 								</label>
 								<label htmlFor="settings-website">

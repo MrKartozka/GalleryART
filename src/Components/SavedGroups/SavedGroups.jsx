@@ -3,15 +3,26 @@ import "./SavedGroups.css";
 
 const SavedGroups = () => {
 	const [dropdownFilter, setDropdownFilter] = useState(false);
+	const [dropdownAdd, setDropdownAdd] = useState(false);
 
-	const toggleDropdown = () => {
+	const toggleFilterDropdown = () => {
 		setDropdownFilter(!dropdownFilter);
+		setDropdownAdd(false);
 	};
+
+	const toggleAddDropdown = () => {
+		setDropdownAdd(!dropdownAdd);
+		setDropdownFilter(false);
+	};
+
 	return (
 		<div className="saved-groups">
 			<div className="saved-groups__buttons">
 				<div className="filter__container">
-					<button className="filter__btn" onClick={toggleDropdown}>
+					<button
+						className="filter__btn"
+						onClick={toggleFilterDropdown}
+					>
 						<img src="../../../filter.svg" alt="" />
 					</button>
 					{dropdownFilter && (
@@ -37,9 +48,27 @@ const SavedGroups = () => {
 						</div>
 					)}
 				</div>
-				<button>
-					<img src="../../../add-group.svg" alt="" />
-				</button>
+				<div className="add__container">
+					<button className="add__btn" onClick={toggleAddDropdown}>
+						<img src="../../../add-group.svg" alt="" />
+					</button>
+					{dropdownAdd && (
+						<div className="dropdown-add">
+							<ul className="filter-list">
+								<li>
+									<button className="filter-btn">
+										Изображение
+									</button>
+								</li>
+								<li>
+									<button className="filter-btn">
+										Коллекция
+									</button>
+								</li>
+							</ul>
+						</div>
+					)}
+				</div>
 			</div>
 			<div className="saved-groups__albums">
 				<div className="saved-groups__albums-item">

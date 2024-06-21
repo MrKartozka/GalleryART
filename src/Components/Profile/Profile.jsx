@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import UserGroups from "../UserGroups/UserGroups";
+import SavedGroups from "../SavedGroups/SavedGroups";
 import "./Profile.css";
 import NavigationBarWithoutFind from "../NavigationBarWithoutFind/NavigationBarWithoutFind";
 import PostDetail from "../PostDetail/PostDetail";
@@ -47,8 +48,10 @@ const Profile = ({ userEmail, onLogout }) => {
 			}
 		};
 
-		fetchPosts(number);
-	}, [number]);
+		if (currentGroup === "added") {
+			fetchPosts(number);
+		}
+	}, [number, currentGroup]);
 
 	const handleScroll = () => {
 		if (
@@ -95,11 +98,7 @@ const Profile = ({ userEmail, onLogout }) => {
 			) : (
 				<div className="profile-container">
 					<div className="profile-info__logo">
-						<img
-							src={getProfilePictureUrl()}
-							alt=""
-							style={{ borderRadius: "50%" }}
-						/>
+						<img src={getProfilePictureUrl()} alt="" />
 						<h3 className="profile-info-name">Автор</h3>
 						<p className="profile-info-email">{userEmail}</p>
 						<p className="profile-info-subscribes">0 подписок</p>
@@ -120,11 +119,15 @@ const Profile = ({ userEmail, onLogout }) => {
 							Сохраненные
 						</button>
 					</div>
-					<UserGroups
-						group={currentGroup}
-						posts={posts}
-						onPostClick={handlePostClick}
-					/>
+					{currentGroup === "added" ? (
+						<UserGroups
+							group={currentGroup}
+							posts={posts}
+							onPostClick={handlePostClick}
+						/>
+					) : (
+						<SavedGroups />
+					)}
 					{loading && <p>Загрузка...</p>}
 				</div>
 			)}

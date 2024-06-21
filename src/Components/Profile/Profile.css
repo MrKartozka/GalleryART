@@ -3,6 +3,13 @@
     margin-top: 50px;
 }
 
+.profile-info__logo img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 .profile-info__logo button {
     padding: 12px;
     border-radius: 20px;
