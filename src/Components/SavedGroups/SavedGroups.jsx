@@ -6,7 +6,15 @@ const SavedGroups = () => {
 	const [dropdownFilter, setDropdownFilter] = useState(false);
 	const [dropdownAdd, setDropdownAdd] = useState(false);
 	const navigate = useNavigate();
-
+	//++ тут добавил Андер
+	const [isModalOpen, setIsModalOpen] = useState(false);
+	const openModal = () => setIsModalOpen(true);
+	const closeModal = () => setIsModalOpen(false);
+	const [isFlagEnabled, setIsFlagEnabled] = useState(false); // Состояние для типа флага
+	const toggleFlag = () => {
+		setIsFlagEnabled(!isFlagEnabled); // Переключение состояния флага
+	};
+	//-- тут добавил Андер
 	const toggleFilterDropdown = () => {
 		setDropdownFilter(!dropdownFilter);
 		setDropdownAdd(false);
@@ -67,7 +75,10 @@ const SavedGroups = () => {
 									</button>
 								</li>
 								<li>
-									<button className="filter-btn">
+									<button
+										className="filter-btn"
+										onClick={openModal}
+									>
 										Коллекция
 									</button>
 								</li>
@@ -91,6 +102,45 @@ const SavedGroups = () => {
 					<p>3 альбома</p>
 				</div>
 			</div>
+			{/*//++ тут добавил Андер */}
+			{isModalOpen && (
+				<div className="modal-overlay">
+					<div className="modal-content">
+						<span className="close-button" onClick={closeModal}>
+							&times;
+						</span>
+						<h2>Создание Коллекции</h2>
+						{/* <p>Здесь можно добавить коллекцию.</p> */}
+						{/* Добавьте здесь поля формы или другой контент */}
+						<div className="name-new-collection">
+							<h3>Название</h3>
+							<input type="text" name="name-collection" />
+						</div>
+						<div className="description-new-collection">
+							<text>Описание</text>
+							<input type="text" name="description-collection" />
+						</div>
+						<div className="visible-collection">
+							{/* <h3>Флаг</h3> */}
+							<label>
+								<input
+									type="checkbox"
+									checked={isFlagEnabled}
+									onChange={toggleFlag}
+								/>{" "}
+								<h4>Сделать Альбом скрытым</h4>
+								Видеть его будете только вы
+							</label>
+						</div>
+						<div className="save-collection">
+							<button className="save-collection-btn">
+								Создать
+							</button>
+						</div>
+					</div>
+				</div>
+			)}
+			{/* //-- тут добавил Андер */}
 		</div>
 	);
 };
