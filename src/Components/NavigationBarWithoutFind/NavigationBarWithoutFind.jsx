@@ -51,6 +51,11 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 								src={getProfilePictureUrl()}
 								className="profile-wf-settings__img"
 								alt="Иконка профиля"
+								style={{
+									borderRadius: "50%",
+									width: "24px",
+									height: "24px",
+								}}
 							/>
 							<img
 								className="profile-wf-setting__arrowdown"

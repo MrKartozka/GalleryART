@@ -71,7 +71,7 @@
 }
 
 .profile-settings__btn {
-    width: 50px;
+    width: 40px;
     background-color: transparent;
     border: none;
     display: flex;
@@ -83,10 +83,12 @@
 .profile-settings__img {
     margin-bottom: 7px;
     border-radius: 50%;
-    border: 1px solid black;
+    /* border: 1px solid black; */
 }
 
-
+/* .profile-setting__arrowdown {
+    width: 10px
+} */
 
 @media screen and (max-width: 1280px) {
     .search-field input {

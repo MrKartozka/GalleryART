@@ -29,6 +29,12 @@
     position: absolute;
     top: 20px;
     left: 20px;
+    cursor: pointer;
+    transition: 0.4s;
+}
+
+.post-detail-back-btn:hover {
+    background-color: rgb(168, 2, 2);
 }
 
 .post-detail-image {

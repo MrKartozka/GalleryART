@@ -9,6 +9,7 @@ import Settings from "./Components/Settings/Settings";
 import AccountManagement from "./Components/Settings/AccountManagement/AccountManagement";
 import ProfileVisibility from "./Components/Settings/ProfileVisibility/ProfileVisibility";
 import PostDetail from "./Components/PostDetail/PostDetail";
+import Collection from "./Components/CollectionArt/Collection";
 
 function AppRouter({
 	isAuthenticated,
@@ -120,6 +121,16 @@ function AppRouter({
 				element={
 					isAuthenticated ? (
 						<PostDetail {...sharedProps} />
+					) : (
+						<Navigate to="/login" />
+					)
+				}
+			/>
+			<Route
+				path="/collection/:collectionId"
+				element={
+					isAuthenticated ? (
+						<Collection {...sharedProps} />
 					) : (
 						<Navigate to="/login" />
 					)

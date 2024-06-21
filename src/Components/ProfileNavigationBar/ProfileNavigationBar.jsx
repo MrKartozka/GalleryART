@@ -71,8 +71,8 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 								alt="Иконка профиля"
 								style={{
 									borderRadius: "50%",
-									width: "32px",
-									height: "32px",
+									// width: "32px",
+									// height: "32px",
 								}}
 							/>
 							<img

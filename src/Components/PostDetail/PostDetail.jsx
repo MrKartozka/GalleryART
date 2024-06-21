@@ -1,8 +1,13 @@
 import React from "react";
 import "./PostDetail.css";
 import config from "../../config";
+import { useLocation, useNavigate } from "react-router-dom";
 
-const PostDetail = ({ post, onClose }) => {
+const PostDetail = () => {
+	const location = useLocation();
+	const post = location.state?.post;
+	const navigate = useNavigate();
+
 	const getImageUrl = (fullFilename) => {
 		const filenameParts = fullFilename.split("/");
 		const bucketName = filenameParts[0];
@@ -10,11 +15,18 @@ const PostDetail = ({ post, onClose }) => {
 		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`;
 	};
 
+	if (!post) {
+		return <div>Loading...</div>;
+	}
+
 	return (
 		<div className="post-detail-wrapper">
 			<div className="post-detail-container">
 				<div className="post-detail-block">
-					<button onClick={onClose} className="post-detail-back-btn">
+					<button
+						onClick={() => navigate(-1)}
+						className="post-detail-back-btn"
+					>
 						Назад
 					</button>
 					<div className="post-detail-image">

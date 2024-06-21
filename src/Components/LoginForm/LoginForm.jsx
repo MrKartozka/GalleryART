@@ -41,6 +41,20 @@ function LoginForm({ setIsAuthenticated, setUserEmail }) {
 			localStorage.setItem("refreshToken", refreshToken);
 			localStorage.setItem("userEmail", login);
 
+			// Fetch user data
+			const userResponse = await axios.get(
+				`${config.apiBaseUrl}/auth/logged-user`,
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
+
+			const userId = userResponse.data.id;
+			localStorage.setItem("userId", userId);
+
 			setIsAuthenticated(true);
 			setUserEmail(login);
 

@@ -14,7 +14,6 @@
 }
 
 .search-field {
-
     flex: 1;
     display: flex;
     justify-content: center;
@@ -32,6 +31,7 @@
     background-image: url("../../../public/lypa.png");
     background-repeat: no-repeat;
     background-position: 99%;
+    user-select: none;
 }
 
 .nav-login {
@@ -41,6 +41,8 @@
     border-radius: 20px;
     width: 55px;
     padding: 5px;
+    cursor: pointer;
+    transition: 0.4s;
 }
 
 .nav-login:hover {
@@ -53,4 +55,9 @@
     text-align: center;
     font-size: 32px;
     padding-bottom: 20px;
+}
+
+.nav__logo {
+    cursor: pointer;
+    user-select: none;
 }

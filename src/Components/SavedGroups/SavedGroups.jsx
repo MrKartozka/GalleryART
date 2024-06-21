@@ -1,9 +1,11 @@
 import { React, useState } from "react";
 import "./SavedGroups.css";
+import { useNavigate } from "react-router-dom";
 
 const SavedGroups = () => {
 	const [dropdownFilter, setDropdownFilter] = useState(false);
 	const [dropdownAdd, setDropdownAdd] = useState(false);
+	const navigate = useNavigate();
 
 	const toggleFilterDropdown = () => {
 		setDropdownFilter(!dropdownFilter);
@@ -13,6 +15,10 @@ const SavedGroups = () => {
 	const toggleAddDropdown = () => {
 		setDropdownAdd(!dropdownAdd);
 		setDropdownFilter(false);
+	};
+
+	const handleAlbumClick = (collectionId) => {
+		navigate(`/collection/${collectionId}`);
 	};
 
 	return (
@@ -76,7 +82,10 @@ const SavedGroups = () => {
 					<h4>Все картинки</h4>
 					<p>3 картинки</p>
 				</div>
-				<div className="saved-groups__albums-item">
+				<div
+					className="saved-groups__albums-item"
+					onClick={handleAlbumClick}
+				>
 					<img src="../../../route.jpg" alt="" />
 					<h4>Альбом1</h4>
 					<p>3 альбома</p>
