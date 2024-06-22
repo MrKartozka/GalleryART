@@ -122,12 +122,12 @@ const SavedGroups = () => {
 						</div>
 						<div className="visible-collection">
 							{/* <h3>Флаг</h3> */}
+							<input
+								type="checkbox"
+								checked={isFlagEnabled}
+								onChange={toggleFlag}
+							/>{" "}
 							<label>
-								<input
-									type="checkbox"
-									checked={isFlagEnabled}
-									onChange={toggleFlag}
-								/>{" "}
 								<h4>Сделать Альбом скрытым</h4>
 								Видеть его будете только вы
 							</label>

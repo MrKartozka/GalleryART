@@ -42,6 +42,9 @@ const AddPicture = ({ userEmail, onLogout }) => {
 			return;
 		}
 
+		const accessToken = localStorage.getItem("accessToken");
+		const username = localStorage.getItem("username");
+
 		const pictureData = {
 			title,
 			description,
@@ -53,11 +56,12 @@ const AddPicture = ({ userEmail, onLogout }) => {
 					id: imageId,
 				},
 			],
+			owner: {
+				name: username,
+			},
 		};
 
 		console.log("Creating post with data:", pictureData);
-
-		const accessToken = localStorage.getItem("accessToken");
 
 		try {
 			const response = await fetch(`${config.apiBaseUrl}/posts`, {
@@ -196,7 +200,7 @@ const AddPicture = ({ userEmail, onLogout }) => {
 							</div>
 							<div className="table-footer">
 								<div className="table-footer__author">
-									Автор: Maestro52
+									Автор: {localStorage.getItem("username")}
 								</div>
 								<button
 									className="table-footer_add-btn"

@@ -1,9 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./Settings.css";
 import { Link } from "react-router-dom";
 import NavigationBarWithoutFind from "../NavigationBarWithoutFind/NavigationBarWithoutFind";
 import Dropzone from "react-dropzone";
 import config from "../../config";
+import axios from "axios";
 
 function Settings({ userEmail, onLogout }) {
 	const [file, setFile] = useState(null);
@@ -11,71 +12,87 @@ function Settings({ userEmail, onLogout }) {
 	const [username, setUsername] = useState("");
 	const [description, setDescription] = useState("");
 
-	const handleUpload = (acceptedFiles) => {
+	const fetchUserData = async () => {
+		const accessToken = localStorage.getItem("accessToken");
+		const userId = localStorage.getItem("userId");
+		try {
+			const response = await axios.get(
+				`${config.apiBaseUrl}/user/${userId}`,
+				{
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
+			const userData = response.data;
+			setUsername(userData.name);
+			setDescription(userData.description);
+			if (userData.image && userData.image.fullFilename) {
+				localStorage.setItem(
+					"profilePicture",
+					userData.image.fullFilename
+				);
+			}
+		} catch (error) {
+			console.error("Error fetching user data:", error);
+		}
+	};
+
+	useEffect(() => {
+		fetchUserData();
+	}, []);
+
+	const handleUpload = async (acceptedFiles) => {
 		setFile(URL.createObjectURL(acceptedFiles[0]));
 
 		const formData = new FormData();
 		formData.append("file", acceptedFiles[0]);
 
-		fetch(config.uploadImageUrl, {
-			method: "POST",
-			body: formData,
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				console.log("Upload success:", data);
-				setImageId(data.id);
-			})
-			.catch((error) => {
-				console.error("Error uploading file:", error);
-			});
+		try {
+			const response = await axios.post(config.uploadImageUrl, formData);
+			console.log("Upload success:", response.data);
+			setImageId(response.data.id);
+		} catch (error) {
+			console.error("Error uploading file:", error);
+		}
 	};
 
-	const handleSave = () => {
-		if (!imageId) {
-			console.error(
-				"Image ID is missing. Cannot update profile picture."
-			);
-			return;
-		}
-
+	const handleSave = async () => {
 		const accessToken = localStorage.getItem("accessToken");
 
 		const payload = {
-			name: username || "defaultName", // Устанавливаем значение по умолчанию, если поле пустое
-			imageId: imageId,
-			description: description || "defaultDescription", // Устанавливаем значение по умолчанию, если поле пустое
+			name: username || "Автор",
+			description: description || "",
 		};
 
-		fetch(`${config.apiBaseUrl}/user/update`, {
-			method: "PUT",
-			headers: {
-				"Content-Type": "application/json",
-				Authorization: `Bearer ${accessToken}`,
-			},
-			body: JSON.stringify(payload),
-		})
-			.then((response) => {
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
+		if (imageId) {
+			payload.imageId = imageId;
+		}
+
+		try {
+			const response = await axios.put(
+				`${config.apiBaseUrl}/user/update`,
+				payload,
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${accessToken}`,
+					},
 				}
-				return response.json();
-			})
-			.then((data) => {
-				console.log("Update success:", data);
-				if (data.image && data.image.fullFilename) {
-					localStorage.setItem(
-						"profilePicture",
-						data.image.fullFilename
-					);
-					window.location.reload();
-				} else {
-					console.error("Profile update failed:", data);
-				}
-			})
-			.catch((error) => {
-				console.error("Error updating profile picture:", error);
-			});
+			);
+			console.log("Update success:", response.data);
+			if (response.data.image && response.data.image.fullFilename) {
+				localStorage.setItem(
+					"profilePicture",
+					response.data.image.fullFilename
+				);
+			}
+			setDescription(payload.description); // Обновляем состояние описания
+			localStorage.setItem("userDescription", payload.description);
+			fetchUserData(); // Обновляем данные пользователя после сохранения
+		} catch (error) {
+			console.error("Error updating profile:", error);
+		}
 	};
 
 	const handleReset = () => {

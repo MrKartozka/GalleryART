@@ -15,7 +15,6 @@ function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 	useEffect(() => {
 		const fetchPosts = async (number) => {
 			const accessToken = localStorage.getItem("accessToken");
-			const userId = localStorage.getItem("userId");
 			setLoading(true);
 			try {
 				const response = await axios.post(
@@ -25,10 +24,7 @@ function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 							number,
 							size: 10,
 						},
-						filterPostRequest: {
-							saved: false,
-							userId: parseInt(userId),
-						},
+						filterPostRequest: {},
 					},
 					{
 						headers: {

@@ -53,7 +53,7 @@ const PostDetail = () => {
 						</div>
 						<div className="table-footer">
 							<div className="table-footer__author">
-								Автор: Maestro52
+								Автор: {post.owner.name}
 							</div>
 						</div>
 					</div>
