@@ -15,6 +15,7 @@ function Settings({ userEmail, onLogout }) {
 	const fetchUserData = async () => {
 		const accessToken = localStorage.getItem("accessToken");
 		const userId = localStorage.getItem("userId");
+
 		try {
 			const response = await axios.get(
 				`${config.apiBaseUrl}/user/${userId}`,
@@ -87,9 +88,9 @@ function Settings({ userEmail, onLogout }) {
 					response.data.image.fullFilename
 				);
 			}
-			setDescription(payload.description); // Обновляем состояние описания
-			localStorage.setItem("userDescription", payload.description);
-			fetchUserData(); // Обновляем данные пользователя после сохранения
+			// Обновляем состояние описания и имя пользователя
+			setUsername(payload.name);
+			setDescription(payload.description);
 		} catch (error) {
 			console.error("Error updating profile:", error);
 		}

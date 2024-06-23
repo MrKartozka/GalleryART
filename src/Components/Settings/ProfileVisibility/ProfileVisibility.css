@@ -106,7 +106,6 @@ body {
     color: #CDCDCD;
 }
 
-/* Внизу гпт  */
 .visibility-settings__profile-form input,
 .visibility-settings__profile-form textarea {
     width: 100%;
@@ -177,8 +176,6 @@ body {
 .visibility-settings__profile-privacy-confidential-box {
     display: flex;
 }
-
-
 
 .switch {
     position: relative;

@@ -15,9 +15,7 @@ function App() {
 	}, []);
 
 	const handleLogout = () => {
-		localStorage.removeItem("accessToken");
-		localStorage.removeItem("refreshToken");
-		localStorage.removeItem("userEmail");
+		localStorage.clear();
 		setIsAuthenticated(false);
 		setUserEmail("");
 	};

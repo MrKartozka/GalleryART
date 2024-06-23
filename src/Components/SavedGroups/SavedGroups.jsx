@@ -6,15 +6,15 @@ const SavedGroups = () => {
 	const [dropdownFilter, setDropdownFilter] = useState(false);
 	const [dropdownAdd, setDropdownAdd] = useState(false);
 	const navigate = useNavigate();
-	//++ тут добавил Андер
 	const [isModalOpen, setIsModalOpen] = useState(false);
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
-	const [isFlagEnabled, setIsFlagEnabled] = useState(false); // Состояние для типа флага
+	const [isFlagEnabled, setIsFlagEnabled] = useState(false);
+
 	const toggleFlag = () => {
-		setIsFlagEnabled(!isFlagEnabled); // Переключение состояния флага
+		setIsFlagEnabled(!isFlagEnabled);
 	};
-	//-- тут добавил Андер
+
 	const toggleFilterDropdown = () => {
 		setDropdownFilter(!dropdownFilter);
 		setDropdownAdd(false);
@@ -102,7 +102,6 @@ const SavedGroups = () => {
 					<p>3 альбома</p>
 				</div>
 			</div>
-			{/*//++ тут добавил Андер */}
 			{isModalOpen && (
 				<div className="modal-overlay">
 					<div className="modal-content">
@@ -110,24 +109,33 @@ const SavedGroups = () => {
 							&times;
 						</span>
 						<h2>Создание Коллекции</h2>
-						{/* <p>Здесь можно добавить коллекцию.</p> */}
-						{/* Добавьте здесь поля формы или другой контент */}
 						<div className="name-new-collection">
-							<h3>Название</h3>
-							<input type="text" name="name-collection" />
+							<h3 className="title-name-collection">Название</h3>
+							<input
+								type="text"
+								name="name-collection"
+								className="name-collection-text"
+								placeholder="Например, “котики” и т.д."
+							/>
 						</div>
 						<div className="description-new-collection">
-							<text>Описание</text>
-							<input type="text" name="description-collection" />
+							<h3 className="title-description-name">Описание</h3>
+
+							<input
+								type="text"
+								name="description-collection"
+								className="description-collection-text"
+								placeholder="Опишите свою коллекцию"
+							/>
 						</div>
 						<div className="visible-collection">
-							{/* <h3>Флаг</h3> */}
 							<input
 								type="checkbox"
 								checked={isFlagEnabled}
 								onChange={toggleFlag}
-							/>{" "}
-							<label>
+								className="visible-collection-flag"
+							/>
+							<label className="visible-collection-text">
 								<h4>Сделать Альбом скрытым</h4>
 								Видеть его будете только вы
 							</label>
@@ -140,7 +148,6 @@ const SavedGroups = () => {
 					</div>
 				</div>
 			)}
-			{/* //-- тут добавил Андер */}
 		</div>
 	);
 };

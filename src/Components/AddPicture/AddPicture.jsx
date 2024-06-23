@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import "./AddPicture.css";
 import Dropzone from "react-dropzone";
 import config from "../../config";
+import axios from "axios";
 import NavigationBarWithoutFind from "../NavigationBarWithoutFind/NavigationBarWithoutFind";
 
 const AddPicture = ({ userEmail, onLogout }) => {
@@ -15,25 +16,20 @@ const AddPicture = ({ userEmail, onLogout }) => {
 	const [posts, setPosts] = useState([]);
 	const navigate = useNavigate();
 
-	const handleUpload = (acceptedFiles) => {
+	const handleUpload = async (acceptedFiles) => {
 		console.log("logging drop/selected file", acceptedFiles);
 		setFile(URL.createObjectURL(acceptedFiles[0]));
 
 		const formData = new FormData();
 		formData.append("file", acceptedFiles[0]);
 
-		fetch(config.uploadImageUrl, {
-			method: "POST",
-			body: formData,
-		})
-			.then((response) => response.json())
-			.then((data) => {
-				console.log("Successfully uploaded:", data);
-				setImageId(data.id);
-			})
-			.catch((error) => {
-				console.error("Error uploading file:", error);
-			});
+		try {
+			const response = await axios.post(config.uploadImageUrl, formData);
+			console.log("Successfully uploaded:", response.data);
+			setImageId(response.data.id);
+		} catch (error) {
+			console.error("Error uploading file:", error);
+		}
 	};
 
 	const handleAddPicture = async () => {
@@ -64,22 +60,19 @@ const AddPicture = ({ userEmail, onLogout }) => {
 		console.log("Creating post with data:", pictureData);
 
 		try {
-			const response = await fetch(`${config.apiBaseUrl}/posts`, {
-				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-					Authorization: `Bearer ${accessToken}`,
-				},
-				body: JSON.stringify(pictureData),
-			});
+			const response = await axios.post(
+				`${config.apiBaseUrl}/posts`,
+				pictureData,
+				{
+					headers: {
+						"Content-Type": "application/json",
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
 
-			if (!response.ok) {
-				throw new Error(`HTTP error! status: ${response.status}`);
-			}
-
-			const data = await response.json();
-			console.log("Successfully created post:", data);
-			setPosts([...posts, data]);
+			console.log("Successfully created post:", response.data);
+			setPosts([...posts, response.data]);
 			navigate("/profile");
 		} catch (error) {
 			console.error("Error creating post:", error);

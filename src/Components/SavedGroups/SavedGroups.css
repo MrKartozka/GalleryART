@@ -117,4 +117,83 @@
 
 .visible-collection {
     display: flex;
+    gap: 10px;
+    margin-top: 30px;
+    align-items: center;
+}
+
+.visible-collection-flag {
+    height: 24px;
+    width: 24px;
+    border-radius: 10px;
+    appearance: none;
+    border: 1px solid black;
+    cursor: pointer;
+    position: relative;
+}
+
+.visible-collection-flag:checked {
+    background-color: rgba(255, 0, 0, 0.89);
+
+}
+
+.visible-collection-flag:checked::after {
+    content: "";
+    position: absolute;
+    left: 7px;
+    top: 3px;
+    width: 5px;
+    height: 10px;
+    border: solid white;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+.visible-collection-text {
+    font-size: 14px;
+    display: flex;
+    flex-direction: column;
+}
+
+.title-description-name {
+    display: flex;
+    justify-content: space-between;
+    font-weight: normal;
+    margin-top: 30px;
+}
+
+.title-name-collection {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 60px;
+}
+
+.description-collection-text {
+    border: 1px solid #D9D9D9;
+    height: 50px;
+    border-radius: 20px;
+    width: 100%;
+    padding-left: 10px;
+    margin-top: 10px;
+}
+
+.name-collection-text {
+    border: 1px solid #D9D9D9;
+    border-radius: 20px;
+    width: 100%;
+    height: 50px;
+    padding-left: 10px;
+    margin-top: 10px;
+}
+
+.save-collection-btn {
+    width: 92px;
+    height: 45px;
+    cursor: pointer;
+    float: right;
+    border-radius: 20px;
+    border: none;
+    background-color: rgba(255, 0, 0, 0.89);
+    color: white;
+    margin-top: 70px;
 }

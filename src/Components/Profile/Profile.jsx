@@ -16,6 +16,7 @@ const Profile = ({ userEmail, onLogout }) => {
 	const [loading, setLoading] = useState(false);
 	const [username, setUsername] = useState("");
 	const [description, setDescription] = useState("");
+	const [profilePicture, setProfilePicture] = useState(null);
 	const navigate = useNavigate();
 
 	const showGroups = (e) => {
@@ -26,6 +27,12 @@ const Profile = ({ userEmail, onLogout }) => {
 		const fetchPosts = async (number) => {
 			const accessToken = localStorage.getItem("accessToken");
 			const userId = localStorage.getItem("userId");
+
+			if (!userId) {
+				console.error("User ID is not defined");
+				return;
+			}
+
 			setLoading(true);
 			try {
 				const response = await axios.post(
@@ -82,12 +89,45 @@ const Profile = ({ userEmail, onLogout }) => {
 	const handlePostClick = (post) => {
 		navigate(`/profile/detail/${post.id}`, { state: { post } });
 	};
+
 	const handleCloseDetail = () => {
 		setSelectedPost(null);
 	};
 
+	const fetchUserData = async () => {
+		const accessToken = localStorage.getItem("accessToken");
+		const userId = localStorage.getItem("userId");
+
+		if (!userId) {
+			console.error("User ID is not defined");
+			return;
+		}
+
+		try {
+			const response = await axios.get(
+				`${config.apiBaseUrl}/user/${userId}`,
+				{
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
+			const userData = response.data;
+			setUsername(userData.name);
+			setDescription(userData.description);
+			setProfilePicture(
+				userData.image ? userData.image.fullFilename : null
+			);
+		} catch (error) {
+			console.error("Error fetching user data:", error);
+		}
+	};
+
+	useEffect(() => {
+		fetchUserData();
+	}, []);
+
 	const getProfilePictureUrl = () => {
-		const profilePicture = localStorage.getItem("profilePicture");
 		if (!profilePicture) return "../../../big-profile.png";
 
 		const filenameParts = profilePicture.split("/");
@@ -95,37 +135,6 @@ const Profile = ({ userEmail, onLogout }) => {
 		const keyName = filenameParts.slice(1).join("/");
 		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`;
 	};
-
-	useEffect(() => {
-		const fetchUserData = async () => {
-			const accessToken = localStorage.getItem("accessToken");
-			const userId = localStorage.getItem("userId");
-			try {
-				const response = await axios.get(
-					`${config.apiBaseUrl}/user/${userId}`,
-					{
-						headers: {
-							Authorization: `Bearer ${accessToken}`,
-						},
-					}
-				);
-				const userData = response.data;
-				setUsername(userData.name);
-				setDescription(userData.description);
-
-				if (userData.image && userData.image.fullFilename) {
-					localStorage.setItem(
-						"profilePicture",
-						userData.image.fullFilename
-					);
-				}
-			} catch (error) {
-				console.error("Error fetching user data:", error);
-			}
-		};
-
-		fetchUserData();
-	}, []);
 
 	return (
 		<>

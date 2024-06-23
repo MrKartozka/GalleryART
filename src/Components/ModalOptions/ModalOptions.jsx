@@ -1,10 +1,40 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import "./ModalOptions.css";
 import { useNavigate } from "react-router-dom";
 import config from "../../config";
+import axios from "axios";
 
 function ModalOptions({ userEmail, onLogout }) {
 	const navigate = useNavigate();
+	const [profilePicture, setProfilePicture] = useState(null);
+	const [username, setUsername] = useState("");
+
+	const fetchUserData = async () => {
+		const accessToken = localStorage.getItem("accessToken");
+		const userId = localStorage.getItem("userId");
+
+		try {
+			const response = await axios.get(
+				`${config.apiBaseUrl}/user/${userId}`,
+				{
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
+			const userData = response.data;
+			setUsername(userData.name);
+			setProfilePicture(
+				userData.image ? userData.image.fullFilename : null
+			);
+		} catch (error) {
+			console.error("Error fetching user data:", error);
+		}
+	};
+
+	useEffect(() => {
+		fetchUserData();
+	}, []);
 
 	const handleProfileClick = () => {
 		navigate("/profile");
@@ -15,7 +45,6 @@ function ModalOptions({ userEmail, onLogout }) {
 	};
 
 	const getProfilePictureUrl = () => {
-		const profilePicture = localStorage.getItem("profilePicture");
 		if (!profilePicture) return "big-profile.png";
 
 		const filenameParts = profilePicture.split("/");
@@ -39,7 +68,7 @@ function ModalOptions({ userEmail, onLogout }) {
 					/>
 				</div>
 				<div className="dropdown__texts">
-					<div className="dropdown__nickname">Artman81</div>
+					<div className="dropdown__nickname">{username}</div>
 					<div className="dropdown__email">{userEmail}</div>
 				</div>
 			</button>

@@ -1,11 +1,14 @@
 import "./ProfileNavigationBar.css";
 import ModalOptions from "../ModalOptions/ModalOptions";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../../config";
+import axios from "axios";
 
 function ProfileNavigationBar({ userEmail, onLogout }) {
 	const [dropdownState, setDropdownState] = useState(false);
+	const [profilePicture, setProfilePicture] = useState(null);
+	const [username, setUsername] = useState("");
 	const navigate = useNavigate();
 
 	const handleDropdown = () => {
@@ -20,8 +23,34 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 		navigate("/add-picture");
 	};
 
+	const fetchUserData = async () => {
+		const accessToken = localStorage.getItem("accessToken");
+		const userId = localStorage.getItem("userId");
+
+		try {
+			const response = await axios.get(
+				`${config.apiBaseUrl}/user/${userId}`,
+				{
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
+			const userData = response.data;
+			setUsername(userData.name);
+			setProfilePicture(
+				userData.image ? userData.image.fullFilename : null
+			);
+		} catch (error) {
+			console.error("Error fetching user data:", error);
+		}
+	};
+
+	useEffect(() => {
+		fetchUserData();
+	}, []);
+
 	const getProfilePictureUrl = () => {
-		const profilePicture = localStorage.getItem("profilePicture");
 		if (!profilePicture) return "../../../profile.png";
 
 		const filenameParts = profilePicture.split("/");
@@ -84,6 +113,8 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 						{dropdownState && (
 							<ModalOptions
 								userEmail={userEmail}
+								username={username}
+								profilePicture={getProfilePictureUrl()}
 								onLogout={onLogout}
 							/>
 						)}

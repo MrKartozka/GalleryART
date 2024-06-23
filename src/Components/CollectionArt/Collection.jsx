@@ -1,8 +1,6 @@
 import config from "../../config";
 import ProfileNavigationBar from "../ProfileNavigationBar/ProfileNavigationBar";
 import "./Collection.css";
-// import config from "../../config";
-// import NavigationBar from "./../NavigationBar/NavigationBar";
 import { useState } from "react";
 
 function Collection({}) {
@@ -23,7 +21,6 @@ function Collection({}) {
 		<>
 			<ProfileNavigationBar />
 
-			{/* Тут нужно сделать отдельный контейнер (див) для верстки названия коллекции */}
 			<div className="collection-container">
 				<div className="collection-setting">
 					<h2 className="collection-name">Альбом1</h2>
@@ -54,7 +51,6 @@ function Collection({}) {
 					<img src="../../../profile-colletcion.svg" alt="" />
 				</div>
 			</div>
-			{/* -------------------------- */}
 
 			<div className="grid-container">
 				<div className="grid-item">

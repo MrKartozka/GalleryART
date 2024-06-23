@@ -12,7 +12,6 @@
     align-items: center;
 }
 
-
 .collection-icon_profile {
     display: flex;
     justify-content: center;
@@ -33,13 +32,6 @@
 
 .collection-dropdown-add {
     position: absolute;
-    /* left: 60px; */
-    /* top: ma; */
-    /* width: 200px; */
     background-color: white;
     border-radius: 20px;
-    /* padding: 10px; */
-    /* z-index: 10; */
-    /* transform: translateX(60%); */
-    /* transform: translateY(-80%); */
 }
