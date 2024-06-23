@@ -87,3 +87,7 @@
         width: 50dvw;
     }
 }
+
+.arrow-up {
+    transform: rotate(180deg);
+}

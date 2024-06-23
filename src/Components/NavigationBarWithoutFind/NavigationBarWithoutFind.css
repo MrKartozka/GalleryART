@@ -22,6 +22,10 @@
     align-items: center;
 }
 
+.arrow-up {
+    transform: rotate(180deg);
+}
+
 .profile-nav-wf__create-profile {
     border: none;
     background-color: white;

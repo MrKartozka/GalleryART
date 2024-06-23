@@ -1,6 +1,6 @@
 import "./ProfileNavigationBar.css";
 import ModalOptions from "../ModalOptions/ModalOptions";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../../config";
 import axios from "axios";
@@ -11,8 +11,11 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 	const [username, setUsername] = useState("");
 	const navigate = useNavigate();
 
+	const dropdownRef = useRef(null);
+	const buttonRef = useRef(null);
+
 	const handleDropdown = () => {
-		setDropdownState(!dropdownState);
+		setDropdownState((prevState) => !prevState); // Инвертируем состояние dropdownState
 	};
 
 	const handleLogoClick = () => {
@@ -49,6 +52,28 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 	useEffect(() => {
 		fetchUserData();
 	}, []);
+
+	useEffect(() => {
+		function handleClickOutside(event) {
+			if (
+				dropdownRef.current &&
+				!dropdownRef.current.contains(event.target) &&
+				!buttonRef.current.contains(event.target)
+			) {
+				setDropdownState(false);
+			}
+		}
+
+		if (dropdownState) {
+			document.addEventListener("mousedown", handleClickOutside);
+		} else {
+			document.removeEventListener("mousedown", handleClickOutside);
+		}
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [dropdownState]);
 
 	const getProfilePictureUrl = () => {
 		if (!profilePicture) return "../../../profile.png";
@@ -92,6 +117,7 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 					<div className="profile-settings">
 						<button
 							className="profile-settings__btn"
+							ref={buttonRef}
 							onClick={handleDropdown}
 						>
 							<img
@@ -105,18 +131,22 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 								}}
 							/>
 							<img
-								className="profile-setting__arrowdown"
+								className={`profile-setting__arrowdown ${
+									dropdownState ? "arrow-up" : ""
+								}`}
 								src="../../../arrow-down.svg"
 								alt=""
 							/>
 						</button>
 						{dropdownState && (
-							<ModalOptions
-								userEmail={userEmail}
-								username={username}
-								profilePicture={getProfilePictureUrl()}
-								onLogout={onLogout}
-							/>
+							<div ref={dropdownRef}>
+								<ModalOptions
+									userEmail={userEmail}
+									username={username}
+									profilePicture={getProfilePictureUrl()}
+									onLogout={onLogout}
+								/>
+							</div>
 						)}
 					</div>
 				</div>

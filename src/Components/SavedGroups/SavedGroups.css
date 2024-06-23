@@ -15,15 +15,22 @@
 }
 
 .saved-groups__albums {
-    display: flex;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 20px;
     margin-top: 20px;
     margin-left: 80px;
-    gap: 20px;
+}
+
+.saved-groups__albums-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .saved-groups__albums img {
-    width: 200px;
-    height: 100px;
+    width: 100%;
+    height: auto;
 }
 
 .filter__container,
@@ -151,7 +158,6 @@
 
 .visible-collection-flag:checked {
     background-color: rgba(255, 0, 0, 0.89);
-
 }
 
 .visible-collection-flag:checked::after {

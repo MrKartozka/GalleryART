@@ -1,25 +1,70 @@
+import React, { useState, useEffect, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import config from "../../config";
 import ProfileNavigationBar from "../ProfileNavigationBar/ProfileNavigationBar";
 import "./Collection.css";
-import { useState, useEffect, useRef } from "react";
 
-function Collection({}) {
-	const url = `${config.apiBaseUrl}/image/default/20240502214901.jpg`;
-	// const [dropdownFilter, setDropdownFilter] = useState(false);
+function Collection() {
+	const { collectionId } = useParams();
+	const [collection, setCollection] = useState(null);
 	const [dropdownAdd, setDropdownAdd] = useState(false);
-
+	const [profilePicture, setProfilePicture] = useState(null);
 	const dropdownRef = useRef(null);
+	const buttonRef = useRef(null);
+	const navigate = useNavigate();
 
-	const buttonRef = useRef(null); // Добавляем ref для кнопки
+	useEffect(() => {
+		const fetchCollection = async () => {
+			const accessToken = localStorage.getItem("accessToken");
+			try {
+				const response = await axios.get(
+					`${config.apiBaseUrl}/post-collection/${collectionId}`,
+					{
+						headers: {
+							Authorization: `Bearer ${accessToken}`,
+						},
+					}
+				);
+				setCollection(response.data);
+				fetchUserProfile(response.data.owner.id);
+			} catch (error) {
+				console.error("Error fetching collection:", error);
+			}
+		};
+
+		fetchCollection();
+	}, [collectionId]);
+
+	const fetchUserProfile = async (userId) => {
+		const accessToken = localStorage.getItem("accessToken");
+		try {
+			const response = await axios.get(
+				`${config.apiBaseUrl}/user/${userId}`,
+				{
+					headers: {
+						Authorization: `Bearer ${accessToken}`,
+					},
+				}
+			);
+			const userProfile = response.data;
+			setProfilePicture(
+				userProfile.image
+					? `${config.apiBaseUrl}/image/${userProfile.image.fullFilename}`
+					: null
+			);
+		} catch (error) {
+			console.error("Error fetching user profile:", error);
+		}
+	};
 
 	useEffect(() => {
 		function handleClickOutside(event) {
 			if (
 				dropdownRef.current &&
 				!dropdownRef.current.contains(event.target) &&
-				!buttonRef.current.contains(event.target) // Проверяем, что клик не был по кнопке
+				!buttonRef.current.contains(event.target)
 			) {
-				console.log("Клик за пределами выпадающего списка");
 				setDropdownAdd(false);
 			}
 		}
@@ -36,17 +81,35 @@ function Collection({}) {
 	}, [dropdownAdd]);
 
 	const toggleAddDropdown = () => {
-		// Переключение состояния dropdownAdd
 		setDropdownAdd((prevState) => !prevState);
 	};
+
+	if (!collection) {
+		return <div>Loading...</div>;
+	}
+
+	const previewImage =
+		collection.posts && collection.posts.length > 0
+			? `${config.apiBaseUrl}/image/${collection.posts[0].images[0]?.fullFilename}`
+			: "../../../route.jpg";
+
+	const userProfileImage =
+		profilePicture || "../../../profile-collection.svg";
 
 	return (
 		<>
 			<ProfileNavigationBar />
-
+			<button
+				className="collection-back-button"
+				onClick={() =>
+					navigate("/profile", { state: { group: "saved" } })
+				}
+			>
+				←
+			</button>
 			<div className="collection-container">
 				<div className="collection-setting">
-					<h2 className="collection-name">Альбом1</h2>
+					<h2 className="collection-name">{collection.title}</h2>
 					<button
 						ref={buttonRef}
 						className={`collection-setting-btn ${
@@ -85,14 +148,30 @@ function Collection({}) {
 					)}
 				</div>
 				<div className="collection-icon_profile">
-					<img src="../../../profile-colletcion.svg" alt="" />
+					<img
+						src={userProfileImage}
+						alt="User"
+						width="50px"
+						height="50px"
+					/>
 				</div>
 			</div>
 
 			<div className="grid-container">
-				<div className="grid-item">
-					<img src={url} alt="" />
-				</div>
+				{collection.posts && collection.posts.length > 0 ? (
+					collection.posts.map((post) => (
+						<div key={post.id} className="grid-item">
+							<img
+								src={`${config.apiBaseUrl}/image/${post.images[0]?.fullFilename}`}
+								alt={post.title}
+							/>
+						</div>
+					))
+				) : (
+					<div className="grid-item">
+						<img src={previewImage} alt="Default" />
+					</div>
+				)}
 			</div>
 		</>
 	);

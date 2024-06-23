@@ -6,10 +6,13 @@ import NavigationBarWithoutFind from "../NavigationBarWithoutFind/NavigationBarW
 import PostDetail from "../PostDetail/PostDetail";
 import config from "../../config";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 const Profile = ({ userEmail, onLogout }) => {
-	const [currentGroup, setCurrentGroup] = useState("added");
+	const location = useLocation();
+	const [currentGroup, setCurrentGroup] = useState(
+		location.state?.group || "added"
+	);
 	const [posts, setPosts] = useState([]);
 	const [selectedPost, setSelectedPost] = useState(null);
 	const [number, setNumber] = useState(0);

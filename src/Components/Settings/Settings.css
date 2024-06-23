@@ -81,6 +81,10 @@ body {
     color: white;
 }
 
+.settings__profile-edit-box-avatar {
+    border-radius: 30px;
+}
+
 .settings__profile-box {
     margin-top: 20px;
 }

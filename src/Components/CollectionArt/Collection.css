@@ -1,8 +1,13 @@
 .collection-container {
     padding-top: 100px;
-    max-width: 180px;
+    max-width: 250px;
     margin: 0 auto;
     padding-bottom: 100px;
+
+}
+
+.collection-name {
+    font-weight: normal;
 }
 
 .collection-setting {
@@ -16,6 +21,11 @@
     display: flex;
     justify-content: center;
     align-items: center;
+}
+
+.collection-icon_profile img {
+    margin-top: 10px;
+    border-radius: 50%;
 }
 
 .collection-setting-btn {

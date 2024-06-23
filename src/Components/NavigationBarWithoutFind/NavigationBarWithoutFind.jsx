@@ -11,9 +11,10 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 	const navigate = useNavigate();
 
 	const dropdownRef = useRef(null);
+	const buttonRef = useRef(null);
 
 	const handleDropdown = () => {
-		setDropdownState(!dropdownState);
+		setDropdownState((prevState) => !prevState); // Переключаем состояние открытия/закрытия
 	};
 
 	const handleLogoClick = () => {
@@ -50,7 +51,8 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 		function handleClickOutside(event) {
 			if (
 				dropdownRef.current &&
-				!dropdownRef.current.contains(event.target)
+				!dropdownRef.current.contains(event.target) &&
+				!buttonRef.current.contains(event.target)
 			) {
 				setDropdownState(false);
 			}
@@ -66,6 +68,14 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 			document.removeEventListener("mousedown", handleClickOutside);
 		};
 	}, [dropdownState]);
+
+	const handleProfileButtonClick = () => {
+		if (dropdownState) {
+			setDropdownState(false); // Закрываем выпадающий список при повторном клике на кнопку профиля
+		} else {
+			setDropdownState(true); // Открываем выпадающий список при первом клике на кнопку профиля
+		}
+	};
 
 	const getProfilePictureUrl = () => {
 		if (!profilePicture) return "../../../profile.png";
@@ -94,8 +104,9 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 					</button>
 					<div className="profile-wf-settings">
 						<button
+							ref={buttonRef}
 							className="profile-settings__btn"
-							onClick={handleDropdown}
+							onClick={handleProfileButtonClick}
 						>
 							<img
 								src={getProfilePictureUrl()}
@@ -108,7 +119,9 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 								}}
 							/>
 							<img
-								className="profile-wf-setting__arrowdown"
+								className={`profile-wf-setting__arrowdown ${
+									dropdownState ? "arrow-up" : ""
+								}`}
 								src="../../../arrow-down.svg"
 								alt=""
 							/>
