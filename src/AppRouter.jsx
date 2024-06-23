@@ -10,6 +10,7 @@ import AccountManagement from "./Components/Settings/AccountManagement/AccountMa
 import ProfileVisibility from "./Components/Settings/ProfileVisibility/ProfileVisibility";
 import PostDetail from "./Components/PostDetail/PostDetail";
 import Collection from "./Components/CollectionArt/Collection";
+import SavedPost from "./Components/SavedPost/SavedPost";
 
 function AppRouter({
 	isAuthenticated,
@@ -131,6 +132,16 @@ function AppRouter({
 				element={
 					isAuthenticated ? (
 						<Collection {...sharedProps} />
+					) : (
+						<Navigate to="/login" />
+					)
+				}
+			/>
+			<Route
+				path="/saved-posts"
+				element={
+					isAuthenticated ? (
+						<SavedPost {...sharedProps} />
 					) : (
 						<Navigate to="/login" />
 					)

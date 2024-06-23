@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import "./SavedGroups.css";
 import { useNavigate } from "react-router-dom";
 
@@ -10,6 +10,12 @@ const SavedGroups = () => {
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => setIsModalOpen(false);
 	const [isFlagEnabled, setIsFlagEnabled] = useState(false);
+
+	//
+	const dropdownFilterRef = useRef(null);
+	const filterButtonRef = useRef(null);
+	const dropdownAddRef = useRef(null);
+	const addButtonRef = useRef(null);
 
 	const toggleFlag = () => {
 		setIsFlagEnabled(!isFlagEnabled);
@@ -29,18 +35,50 @@ const SavedGroups = () => {
 		navigate(`/collection/${collectionId}`);
 	};
 
+	const handleAllPostsClick = () => {
+		navigate("/saved-posts");
+	};
+
+	useEffect(() => {
+		function handleClickOutside(event) {
+			if (
+				(dropdownFilterRef.current &&
+					!dropdownFilterRef.current.contains(event.target) &&
+					!filterButtonRef.current.contains(event.target)) ||
+				(dropdownAddRef.current &&
+					!dropdownAddRef.current.contains(event.target) &&
+					!addButtonRef.current.contains(event.target))
+			) {
+				console.log("Клик за пределами выпадающего списка");
+				setDropdownFilter(false);
+				setDropdownAdd(false);
+			}
+		}
+
+		document.addEventListener("mousedown", handleClickOutside);
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, []);
+
 	return (
 		<div className="saved-groups">
 			<div className="saved-groups__buttons">
 				<div className="filter__container">
 					<button
-						className="filter__btn"
+						className={`filter__btn ${
+							dropdownFilter ? "active" : ""
+						}`}
+						ref={filterButtonRef}
 						onClick={toggleFilterDropdown}
 					>
 						<img src="../../../filter.svg" alt="" />
 					</button>
 					{dropdownFilter && (
-						<div className="dropdown-filter">
+						<div
+							className="dropdown-filter"
+							ref={dropdownFilterRef}
+						>
 							<ul className="filter-list">
 								<span className="filter-sort">Сортировка</span>
 								<li>
@@ -63,11 +101,15 @@ const SavedGroups = () => {
 					)}
 				</div>
 				<div className="add__container">
-					<button className="add__btn" onClick={toggleAddDropdown}>
+					<button
+						className={`add__btn ${dropdownAdd ? "active" : ""}`}
+						onClick={toggleAddDropdown}
+						ref={addButtonRef}
+					>
 						<img src="../../../add-group.svg" alt="" />
 					</button>
 					{dropdownAdd && (
-						<div className="dropdown-add">
+						<div className="dropdown-add" ref={dropdownAddRef}>
 							<ul className="filter-list">
 								<li>
 									<button className="filter-btn">
@@ -88,18 +130,21 @@ const SavedGroups = () => {
 				</div>
 			</div>
 			<div className="saved-groups__albums">
-				<div className="saved-groups__albums-item">
+				<div
+					className="saved-groups__albums-item"
+					onClick={handleAllPostsClick}
+				>
 					<img src="../../../background.jpg" alt="" />
-					<h4>Все картинки</h4>
-					<p>3 картинки</p>
+					<h4>Все посты</h4>
+					<p>30 постов</p>
 				</div>
 				<div
 					className="saved-groups__albums-item"
 					onClick={handleAlbumClick}
 				>
 					<img src="../../../route.jpg" alt="" />
-					<h4>Альбом1</h4>
-					<p>3 альбома</p>
+					<h4>Коллекция1</h4>
+					<p>3 поста</p>
 				</div>
 			</div>
 			{isModalOpen && (

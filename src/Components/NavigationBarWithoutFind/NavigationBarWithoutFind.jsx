@@ -1,6 +1,6 @@
 import "./NavigationBarWithoutFind.css";
 import ModalOptions from "../ModalOptions/ModalOptions";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import config from "../../config";
 import axios from "axios";
@@ -9,6 +9,8 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 	const [dropdownState, setDropdownState] = useState(false);
 	const [profilePicture, setProfilePicture] = useState(null);
 	const navigate = useNavigate();
+
+	const dropdownRef = useRef(null);
 
 	const handleDropdown = () => {
 		setDropdownState(!dropdownState);
@@ -43,6 +45,27 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 	useEffect(() => {
 		fetchUserData();
 	}, []);
+
+	useEffect(() => {
+		function handleClickOutside(event) {
+			if (
+				dropdownRef.current &&
+				!dropdownRef.current.contains(event.target)
+			) {
+				setDropdownState(false);
+			}
+		}
+
+		if (dropdownState) {
+			document.addEventListener("mousedown", handleClickOutside);
+		} else {
+			document.removeEventListener("mousedown", handleClickOutside);
+		}
+
+		return () => {
+			document.removeEventListener("mousedown", handleClickOutside);
+		};
+	}, [dropdownState]);
 
 	const getProfilePictureUrl = () => {
 		if (!profilePicture) return "../../../profile.png";
@@ -90,11 +113,14 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 								alt=""
 							/>
 						</button>
+
 						{dropdownState && (
-							<ModalOptions
-								userEmail={userEmail}
-								onLogout={onLogout}
-							/>
+							<div ref={dropdownRef}>
+								<ModalOptions
+									userEmail={userEmail}
+									onLogout={onLogout}
+								/>
+							</div>
 						)}
 					</div>
 				</div>

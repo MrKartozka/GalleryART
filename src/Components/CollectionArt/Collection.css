@@ -28,10 +28,50 @@
     cursor: pointer;
     align-items: center;
     font-size: 20px;
+    transition: 0.4s;
+}
+
+.collection-setting-btn:hover {
+    background-color: rgb(190, 190, 190);
+}
+
+.collection-setting-btn.active {
+    background-color: black;
+    color: white;
 }
 
 .collection-dropdown-add {
     position: absolute;
     background-color: white;
     border-radius: 20px;
+    padding: 10px;
+    transform: translateY(60%) translateX(30%);
+}
+
+.header-collection-filter-btn {
+    font-weight: normal;
+    padding: 10px;
+    text-align: center;
+    font-size: 14px;
+}
+
+.collection-filter-btn {
+    display: flex;
+    cursor: pointer;
+    border-radius: 15px;
+    border: none;
+    width: 100%;
+    padding: 10px;
+    height: 45px;
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+    font-size: 16px;
+    background-color: white;
+    transition: 0.2s;
+}
+
+.collection-filter-btn:hover {
+    border-radius: 10px;
+    border: 1px solid #2797ff;
 }

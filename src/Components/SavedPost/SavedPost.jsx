@@ -4,17 +4,16 @@ import NavigationBar from "./../NavigationBar/NavigationBar";
 import axios from "axios";
 import config from "../../config";
 import { useNavigate } from "react-router-dom";
-import "./GalleryList.css";
+import "./SavedPost.css";
 
-function GalleryList({ userEmail, onLogout, isAuthenticated }) {
-	const [posts, setPosts] = useState([]);
-	const [savedPostIds, setSavedPostIds] = useState(new Set());
+function SavedPost({ userEmail, onLogout, isAuthenticated }) {
+	const [savedPosts, setSavedPosts] = useState([]);
 	const [number, setNumber] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		const fetchPosts = async (number) => {
+		const fetchSavedPosts = async (number) => {
 			const accessToken = localStorage.getItem("accessToken");
 			const userId = localStorage.getItem("userId");
 			setLoading(true);
@@ -25,28 +24,6 @@ function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 						pageInfo: {
 							number,
 							size: 10,
-						},
-						filterPostRequest: {},
-					},
-					{
-						headers: {
-							"Content-Type": "application/json",
-							Authorization: `Bearer ${accessToken}`,
-						},
-					}
-				);
-				setPosts((prevPosts) => [
-					...prevPosts,
-					...response.data.content,
-				]);
-
-				// Fetch saved posts
-				const savedResponse = await axios.post(
-					`${config.apiBaseUrl}/posts/action/search-all`,
-					{
-						pageInfo: {
-							number: 0,
-							size: 1000,
 						},
 						filterPostRequest: {
 							saved: true,
@@ -60,17 +37,15 @@ function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 						},
 					}
 				);
-				setSavedPostIds(
-					new Set(savedResponse.data.content.map((post) => post.id))
-				);
+				setSavedPosts(response.data.content);
 			} catch (error) {
-				console.error("Error loading posts:", error);
+				console.error("Error loading saved posts:", error);
 			} finally {
 				setLoading(false);
 			}
 		};
 
-		fetchPosts(number);
+		fetchSavedPosts(number);
 	}, [number]);
 
 	const handleScroll = () => {
@@ -93,15 +68,8 @@ function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 		navigate(`/profile/detail/${post.id}`, { state: { post } });
 	};
 
-	const handleSaveClick = async (postId, authorId) => {
+	const handleRemoveClick = async (postId) => {
 		const accessToken = localStorage.getItem("accessToken");
-		const userId = localStorage.getItem("userId");
-
-		if (userId === authorId) {
-			console.log("You cannot save your own post.");
-			return;
-		}
-
 		try {
 			const response = await axios.put(
 				`${config.apiBaseUrl}/posts/action/add-to-saved/${postId}`,
@@ -114,18 +82,14 @@ function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 				}
 			);
 			console.log(
-				`Save/remove post response for postId ${postId}:`,
+				`Remove post response for postId ${postId}:`,
 				response.data
 			);
 			if (response.data === true) {
-				setSavedPostIds(new Set([...savedPostIds, postId]));
-			} else {
-				setSavedPostIds(
-					new Set([...savedPostIds].filter((id) => id !== postId))
-				);
+				setSavedPosts(savedPosts.filter((post) => post.id !== postId));
 			}
 		} catch (error) {
-			console.error("Error saving/removing post:", error);
+			console.error("Error removing post:", error);
 		}
 	};
 
@@ -140,31 +104,29 @@ function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 				<NavigationBar isAuthenticated={isAuthenticated} />
 			)}
 
-			<div className="grid-container">
-				{posts.map((post, index) => (
+			<div className="saved-grid-container">
+				{savedPosts.map((post, index) => (
 					<div
 						key={index}
-						className="grid-item"
+						className="saved-grid-item"
 						onClick={() => handlePostClick(post)}
 					>
-						<div className="image-container">
+						<div className="saved-image-container">
 							<img
 								src={`${config.apiBaseUrl}/image/${post.images[0]?.fullFilename}`}
 								alt={post.title}
 							/>
-							<div className="overlay">
-								<div className="text">{post.title}</div>
+							<div className="saved-overlay">
+								<div className="saved-text">{post.title}</div>
 							</div>
 							<button
-								className="save-button"
+								className="remove-button"
 								onClick={(e) => {
 									e.stopPropagation();
-									handleSaveClick(post.id, post.userId);
+									handleRemoveClick(post.id);
 								}}
 							>
-								{savedPostIds.has(post.id)
-									? "Сохранено"
-									: "Сохранить"}
+								Удалить
 							</button>
 						</div>
 					</div>
@@ -175,4 +137,4 @@ function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 	);
 }
 
-export default GalleryList;
+export default SavedPost;
