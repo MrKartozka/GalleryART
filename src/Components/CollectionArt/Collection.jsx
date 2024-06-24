@@ -8,6 +8,7 @@ import "./Collection.css";
 function Collection() {
 	const { collectionId } = useParams();
 	const [collection, setCollection] = useState(null);
+	const [posts, setPosts] = useState([]);
 	const [dropdownAdd, setDropdownAdd] = useState(false);
 	const [profilePicture, setProfilePicture] = useState(null);
 	const dropdownRef = useRef(null);
@@ -28,8 +29,37 @@ function Collection() {
 				);
 				setCollection(response.data);
 				fetchUserProfile(response.data.owner.id);
+				fetchCollectionPosts(response.data.id);
 			} catch (error) {
 				console.error("Error fetching collection:", error);
+			}
+		};
+
+		const fetchCollectionPosts = async (collectionId) => {
+			const accessToken = localStorage.getItem("accessToken");
+			const requestData = {
+				pageInfo: {
+					number: 0,
+					size: 10,
+				},
+				filterPostByCollectionRequest: {
+					collectionId: collectionId,
+				},
+			};
+			try {
+				const response = await axios.post(
+					`${config.apiBaseUrl}/posts/action/search-by-collection`,
+					requestData,
+					{
+						headers: {
+							Authorization: `Bearer ${accessToken}`,
+							"Content-Type": "application/json",
+						},
+					}
+				);
+				setPosts(response.data.content);
+			} catch (error) {
+				console.error("Error fetching posts in collection:", error);
 			}
 		};
 
@@ -89,8 +119,8 @@ function Collection() {
 	}
 
 	const previewImage =
-		collection.posts && collection.posts.length > 0
-			? `${config.apiBaseUrl}/image/${collection.posts[0].images[0]?.fullFilename}`
+		posts.length > 0
+			? `${config.apiBaseUrl}/image/${posts[0].images[0]?.fullFilename}`
 			: "../../../route.jpg";
 
 	const userProfileImage =
@@ -158,8 +188,8 @@ function Collection() {
 			</div>
 
 			<div className="grid-container">
-				{collection.posts && collection.posts.length > 0 ? (
-					collection.posts.map((post) => (
+				{posts.length > 0 ? (
+					posts.map((post) => (
 						<div key={post.id} className="grid-item">
 							<img
 								src={`${config.apiBaseUrl}/image/${post.images[0]?.fullFilename}`}

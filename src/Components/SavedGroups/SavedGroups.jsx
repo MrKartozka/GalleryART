@@ -71,7 +71,6 @@ const SavedGroups = () => {
 					},
 				}
 			);
-			console.log("Fetched collections:", response.data.content);
 			setCollections(response.data.content);
 		} catch (error) {
 			console.error("Error fetching collections:", error);

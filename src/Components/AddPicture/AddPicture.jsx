@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import "./AddPicture.css";
 import Dropzone from "react-dropzone";
@@ -13,7 +13,7 @@ const AddPicture = ({ userEmail, onLogout }) => {
 	const [description, setDescription] = useState("");
 	const [groupName, setGroupName] = useState("");
 	const [tags, setTags] = useState("");
-	const [posts, setPosts] = useState([]);
+	const [username, setUsername] = useState("");
 	const navigate = useNavigate();
 
 	const handleUpload = async (acceptedFiles) => {
@@ -39,7 +39,6 @@ const AddPicture = ({ userEmail, onLogout }) => {
 		}
 
 		const accessToken = localStorage.getItem("accessToken");
-		const username = localStorage.getItem("username");
 
 		const pictureData = {
 			title,
@@ -72,12 +71,16 @@ const AddPicture = ({ userEmail, onLogout }) => {
 			);
 
 			console.log("Successfully created post:", response.data);
-			setPosts([...posts, response.data]);
-			navigate("/profile");
+			navigate("/profile", { state: { group: "added" } });
 		} catch (error) {
 			console.error("Error creating post:", error);
 		}
 	};
+
+	useEffect(() => {
+		const username = localStorage.getItem("username");
+		setUsername(username);
+	}, []);
 
 	return (
 		<>
@@ -193,7 +196,7 @@ const AddPicture = ({ userEmail, onLogout }) => {
 							</div>
 							<div className="table-footer">
 								<div className="table-footer__author">
-									Автор: {localStorage.getItem("username")}
+									Автор: {username}
 								</div>
 								<button
 									className="table-footer_add-btn"

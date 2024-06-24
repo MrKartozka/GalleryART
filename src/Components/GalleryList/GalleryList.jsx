@@ -14,7 +14,7 @@ function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 	const navigate = useNavigate();
 
 	useEffect(() => {
-		const fetchPosts = async (number) => {
+		const fetchPosts = async () => {
 			const accessToken = localStorage.getItem("accessToken");
 			const userId = localStorage.getItem("userId");
 			setLoading(true);
@@ -35,12 +35,16 @@ function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 						},
 					}
 				);
-				setPosts((prevPosts) => [
-					...prevPosts,
-					...response.data.content,
-				]);
+				setPosts((prevPosts) => {
+					const newPosts = response.data.content.filter(
+						(post) =>
+							!prevPosts.some(
+								(prevPost) => prevPost.id === post.id
+							)
+					);
+					return [...prevPosts, ...newPosts];
+				});
 
-				// Fetch saved posts
 				const savedResponse = await axios.post(
 					`${config.apiBaseUrl}/posts/action/search-all`,
 					{
@@ -141,9 +145,9 @@ function GalleryList({ userEmail, onLogout, isAuthenticated }) {
 			)}
 
 			<div className="grid-container">
-				{posts.map((post, index) => (
+				{posts.map((post) => (
 					<div
-						key={index}
+						key={post.id} // Используем post.id для уникального ключа
 						className="grid-item"
 						onClick={() => handlePostClick(post)}
 					>

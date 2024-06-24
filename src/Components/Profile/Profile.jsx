@@ -57,10 +57,7 @@ const Profile = ({ userEmail, onLogout }) => {
 						},
 					}
 				);
-				setPosts((prevPosts) => [
-					...prevPosts,
-					...response.data.content,
-				]);
+				setPosts(response.data.content);
 			} catch (error) {
 				console.error("Error loading posts:", error);
 			} finally {
