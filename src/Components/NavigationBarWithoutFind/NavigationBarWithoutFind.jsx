@@ -5,48 +5,54 @@ import { useNavigate } from "react-router-dom";
 import config from "../../config";
 import axios from "axios";
 
+// Компонент NavigationBarWithoutFind отображает навигационную панель без функции поиска
 function NavigationBarWithoutFind({ userEmail, onLogout }) {
 	const [dropdownState, setDropdownState] = useState(false);
 	const [profilePicture, setProfilePicture] = useState(null);
 	const navigate = useNavigate();
 
-	const dropdownRef = useRef(null);
-	const buttonRef = useRef(null);
+	const dropdownRef = useRef(null); // Реф для выпадающего меню
+	const buttonRef = useRef(null); // Реф для кнопки профиля
 
-	const handleDropdown = () => {
-		setDropdownState((prevState) => !prevState); // Переключаем состояние открытия/закрытия
-	};
+	// Функция для переключения состояния выпадающего меню
+	// const handleDropdown = () => {
+	// 	setDropdownState((prevState) => !prevState); // Переключаем состояние открытия/закрытия
+	// };
 
+	// Функция для обработки клика по логотипу
 	const handleLogoClick = () => {
 		navigate("/gallery");
 	};
 
+	// Функция для получения данных пользователя
 	const fetchUserData = async () => {
 		const accessToken = localStorage.getItem("accessToken");
 		const userId = localStorage.getItem("userId");
 
 		try {
 			const response = await axios.get(
-				`${config.apiBaseUrl}/user/${userId}`,
+				`${config.apiBaseUrl}/user/${userId}`, // Запрос к API для получения данных пользователя
 				{
 					headers: {
-						Authorization: `Bearer ${accessToken}`,
+						Authorization: `Bearer ${accessToken}`, // Добавляем токен доступа в заголовок запроса
 					},
 				}
 			);
-			const userData = response.data;
+			const userData = response.data; // Полученные данные пользователя
 			setProfilePicture(
-				userData.image ? userData.image.fullFilename : null
+				userData.image ? userData.image.fullFilename : null // Устанавливаем URL изображения профиля в состояние
 			);
 		} catch (error) {
 			console.error("Error fetching user data:", error);
 		}
 	};
 
+	// Хук useEffect для вызова функции fetchUserData при монтировании компонента
 	useEffect(() => {
 		fetchUserData();
 	}, []);
 
+	// Хук useEffect для обработки кликов вне выпадающего меню
 	useEffect(() => {
 		function handleClickOutside(event) {
 			if (
@@ -54,7 +60,7 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 				!dropdownRef.current.contains(event.target) &&
 				!buttonRef.current.contains(event.target)
 			) {
-				setDropdownState(false);
+				setDropdownState(false); // Закрываем выпадающее меню при клике вне его области
 			}
 		}
 
@@ -77,13 +83,14 @@ function NavigationBarWithoutFind({ userEmail, onLogout }) {
 		}
 	};
 
+	// Функция для получения URL изображения профиля
 	const getProfilePictureUrl = () => {
-		if (!profilePicture) return "../../../profile.png";
+		if (!profilePicture) return "../../../profile.png"; // Возвращаем URL изображения по умолчанию, если профильное изображение не установлено
 
-		const filenameParts = profilePicture.split("/");
-		const bucketName = filenameParts[0];
-		const keyName = filenameParts.slice(1).join("/");
-		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`;
+		const filenameParts = profilePicture.split("/"); // Разделяем URL изображения на части
+		const bucketName = filenameParts[0]; // Имя корзины
+		const keyName = filenameParts.slice(1).join("/"); // Имя файла
+		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`; // Возвращаем полный URL изображения
 	};
 
 	return (

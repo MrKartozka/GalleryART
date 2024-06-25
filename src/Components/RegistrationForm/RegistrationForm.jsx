@@ -13,8 +13,9 @@ function RegistrationForm() {
 	const [error, setError] = useState("");
 	const [showModal, setShowModal] = useState(false);
 	const [token, setToken] = useState("");
-	const navigate = useNavigate();
+	const navigate = useNavigate(); // Инициализируем хук навигации
 
+	// Функция для переключения видимости пароля
 	const togglePasswordVisibility = () => {
 		setIsPasswordVisible(!isPasswordVisible);
 	};
@@ -22,24 +23,27 @@ function RegistrationForm() {
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 		if (password !== confirmPassword) {
+			// Проверяем, совпадают ли пароли
 			setError("Пароли не совпадают");
 			return;
 		}
 
 		try {
+			// Выполняем POST-запрос для регистрации пользователя
 			const response = await axios.post(`${config.apiBaseUrl}/auth/reg`, {
 				login,
 				password,
 			});
 			console.log("Registration successful", response.data);
-			setToken(response.data.token);
-			setShowModal(true);
+			setToken(response.data.token); // Сохраняем токен из ответа
+			setShowModal(true); // Показываем модальное окно для подтверждения Email
 		} catch (error) {
 			console.error("Error during registration", error);
-			setError("Ошибка при регистрации");
+			setError("Ошибка при регистрации"); // Устанавливаем сообщение об ошибке
 		}
 	};
 
+	// Обработчик закрытия модального окна подтверждения Email
 	const handleEmailConfirmationClose = () => {
 		setShowModal(false);
 		navigate("/login");

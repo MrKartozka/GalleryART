@@ -6,18 +6,21 @@ import config from "../../config";
 import { useNavigate } from "react-router-dom";
 import "./SavedPost.css";
 
+// Компонент для отображения сохраненных постов
 function SavedPost({ userEmail, onLogout, isAuthenticated }) {
 	const [savedPosts, setSavedPosts] = useState([]);
 	const [number, setNumber] = useState(0);
 	const [loading, setLoading] = useState(false);
 	const navigate = useNavigate();
 
+	// Хук для получения сохраненных постов при изменении номера страницы
 	useEffect(() => {
 		const fetchSavedPosts = async (number) => {
 			const accessToken = localStorage.getItem("accessToken");
 			const userId = localStorage.getItem("userId");
 			setLoading(true);
 			try {
+				// Выполняем POST-запрос для получения сохраненных постов
 				const response = await axios.post(
 					`${config.apiBaseUrl}/posts/action/search-all`,
 					{
@@ -37,7 +40,7 @@ function SavedPost({ userEmail, onLogout, isAuthenticated }) {
 						},
 					}
 				);
-				setSavedPosts(response.data.content);
+				setSavedPosts(response.data.content); // Обновляем состояние сохраненных постов
 			} catch (error) {
 				console.error("Error loading saved posts:", error);
 			} finally {
@@ -45,18 +48,20 @@ function SavedPost({ userEmail, onLogout, isAuthenticated }) {
 			}
 		};
 
-		fetchSavedPosts(number);
+		fetchSavedPosts(number); // Вызываем функцию для загрузки сохраненных постов
 	}, [number]);
 
+	// Обработчик прокрутки для загрузки новых постов при достижении конца страницы
 	const handleScroll = () => {
 		if (
 			window.innerHeight + document.documentElement.scrollTop ===
 			document.documentElement.offsetHeight
 		) {
-			setNumber((prevNumber) => prevNumber + 1);
+			setNumber((prevNumber) => prevNumber + 1); // Увеличиваем номер страницы на 1
 		}
 	};
 
+	// Хук для добавления и удаления обработчика прокрутки
 	useEffect(() => {
 		window.addEventListener("scroll", handleScroll);
 		return () => {
@@ -64,10 +69,12 @@ function SavedPost({ userEmail, onLogout, isAuthenticated }) {
 		};
 	}, []);
 
+	// Обработчик клика по посту для перехода на страницу деталей поста
 	const handlePostClick = (post) => {
 		navigate(`/profile/detail/${post.id}`, { state: { post } });
 	};
 
+	// Обработчик для удаления поста из сохраненных
 	const handleRemoveClick = async (postId) => {
 		const accessToken = localStorage.getItem("accessToken");
 		try {
@@ -86,7 +93,7 @@ function SavedPost({ userEmail, onLogout, isAuthenticated }) {
 				response.data
 			);
 			if (response.data === true) {
-				setSavedPosts(savedPosts.filter((post) => post.id !== postId));
+				setSavedPosts(savedPosts.filter((post) => post.id !== postId)); // Обновляем состояние сохраненных постов
 			}
 		} catch (error) {
 			console.error("Error removing post:", error);

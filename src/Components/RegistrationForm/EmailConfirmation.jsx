@@ -6,8 +6,10 @@ import "./EmailConfirmation.css";
 function EmailConfirmation({ show, handleClose, token }) {
 	const [confirmationStatus, setConfirmationStatus] = useState("");
 
+	// Функция для подтверждения email
 	const confirmEmail = async () => {
 		try {
+			// Выполняем GET-запрос для подтверждения email
 			const response = await axios.get(
 				`${config.apiBaseUrl}/auth/confirm`,
 				{
@@ -21,7 +23,7 @@ function EmailConfirmation({ show, handleClose, token }) {
 	};
 
 	if (!show) {
-		return null;
+		return null; // Если show равно false, не отображаем компонент
 	}
 
 	return (

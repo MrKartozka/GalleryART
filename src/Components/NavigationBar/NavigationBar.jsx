@@ -1,6 +1,7 @@
 import "./NavigationBar.css";
 import { Link } from "react-router-dom";
 
+// Компонент NavigationBar отображает навигационную панель
 function NavigationBar({ isAuthenticated }) {
 	return (
 		<div className="nav">
@@ -18,7 +19,8 @@ function NavigationBar({ isAuthenticated }) {
 						placeholder="Поиск картинки"
 					/>
 				</div>
-				{isAuthenticated && <img src="" alt="" />}
+				{isAuthenticated && <img src="" alt="" />}{" "}
+				{/* Иконка для аутентифицированных пользователей */}
 				{!isAuthenticated && (
 					<Link to="/login">
 						<button className="nav-login">Вход</button>

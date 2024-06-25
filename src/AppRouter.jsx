@@ -19,8 +19,9 @@ function AppRouter({
 	userEmail,
 	handleLogout,
 }) {
-	const location = useLocation();
+	const location = useLocation(); // Получаем текущую локацию
 
+	// Общие свойства, передаваемые в компоненты
 	const sharedProps = {
 		userEmail,
 		onLogout: handleLogout,
@@ -28,7 +29,7 @@ function AppRouter({
 	};
 
 	useEffect(() => {
-		localStorage.setItem("lastPath", location.pathname);
+		localStorage.setItem("lastPath", location.pathname); // Сохраняем последний путь в localStorage при каждом изменении локации
 	}, [location]);
 
 	return (
@@ -37,7 +38,7 @@ function AppRouter({
 				path="/"
 				element={
 					<Navigate
-						to={localStorage.getItem("lastPath") || "/gallery"}
+						to={localStorage.getItem("lastPath") || "/gallery"} // Перенаправляем на последний сохраненный путь или на галерею
 					/>
 				}
 			/>
@@ -45,9 +46,9 @@ function AppRouter({
 				path="/register"
 				element={
 					isAuthenticated ? (
-						<Navigate to="/gallery" />
+						<Navigate to="/gallery" /> // Если аутентифицирован, перенаправляем в галерею
 					) : (
-						<RegistrationForm />
+						<RegistrationForm /> // Иначе показываем форму регистрации
 					)
 				}
 			/>
@@ -56,13 +57,13 @@ function AppRouter({
 				element={
 					isAuthenticated ? (
 						<Navigate
-							to={localStorage.getItem("lastPath") || "/gallery"}
+							to={localStorage.getItem("lastPath") || "/gallery"} // Если аутентифицирован, перенаправляем на последний сохраненный путь или в галерею.
 						/>
 					) : (
 						<LoginForm
 							setIsAuthenticated={setIsAuthenticated}
 							setUserEmail={setUserEmail}
-						/>
+						/> // Иначе показываем форму входа
 					)
 				}
 			/>

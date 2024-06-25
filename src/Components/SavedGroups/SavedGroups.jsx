@@ -4,6 +4,7 @@ import config from "../../config";
 import "./SavedGroups.css";
 import { useNavigate } from "react-router-dom";
 
+// Компонент для отображения сохраненных групп
 const SavedGroups = () => {
 	const [dropdownFilter, setDropdownFilter] = useState(false);
 	const [dropdownAdd, setDropdownAdd] = useState(false);
@@ -14,15 +15,17 @@ const SavedGroups = () => {
 	const [isFlagEnabled, setIsFlagEnabled] = useState(false);
 	const navigate = useNavigate();
 
-	const filterButtonRef = useRef(null);
-	const addButtonRef = useRef(null);
-	const dropdownFilterRef = useRef(null);
-	const dropdownAddRef = useRef(null);
+	const filterButtonRef = useRef(null); // Реф для кнопки фильтра
+	const addButtonRef = useRef(null); // Реф для кнопки добавления
+	const dropdownFilterRef = useRef(null); // Реф для выпадающего списка фильтров
+	const dropdownAddRef = useRef(null); // Реф для выпадающего списка добавления
 
+	// Хук для получения коллекций при монтировании компонента
 	useEffect(() => {
 		fetchCollections();
 	}, []);
 
+	// Хук для закрытия выпадающих списков при клике вне их области
 	useEffect(() => {
 		function handleClickOutside(event) {
 			if (
@@ -47,6 +50,7 @@ const SavedGroups = () => {
 		};
 	}, []);
 
+	// Функция для получения всех коллекций пользователя
 	const fetchCollections = async () => {
 		const accessToken = localStorage.getItem("accessToken");
 		const userId = localStorage.getItem("userId");
@@ -71,26 +75,30 @@ const SavedGroups = () => {
 					},
 				}
 			);
-			setCollections(response.data.content);
+			setCollections(response.data.content); // Обновляем состояние коллекций
 		} catch (error) {
 			console.error("Error fetching collections:", error);
 		}
 	};
 
+	// Функция для переключения флага видимости коллекции
 	const toggleFlag = () => {
 		setIsFlagEnabled(!isFlagEnabled);
 	};
 
+	// Функция для переключения видимости выпадающего списка фильтров
 	const toggleFilterDropdown = () => {
 		setDropdownFilter(!dropdownFilter);
 		setDropdownAdd(false);
 	};
 
+	// Функция для переключения видимости выпадающего списка добавления
 	const toggleAddDropdown = () => {
 		setDropdownAdd(!dropdownAdd);
 		setDropdownFilter(false);
 	};
 
+	// Функции для открытия и закрытия модального окна
 	const openModal = () => setIsModalOpen(true);
 	const closeModal = () => {
 		setIsModalOpen(false);
@@ -98,14 +106,17 @@ const SavedGroups = () => {
 		setCollectionDescription("");
 	};
 
+	// Функция для перехода к коллекции
 	const handleAlbumClick = (collectionId) => {
 		navigate(`/collection/${collectionId}`);
 	};
 
+	// Функция для перехода к сохраненным постам
 	const handleAllPostsClick = () => {
 		navigate("/saved-posts");
 	};
 
+	// Функция для создания новой коллекции
 	const handleCreateCollection = async () => {
 		const accessToken = localStorage.getItem("accessToken");
 
@@ -124,7 +135,7 @@ const SavedGroups = () => {
 					},
 				}
 			);
-			setCollections([...collections, response.data]);
+			setCollections([...collections, response.data]); // Обновляем состояние коллекций
 			closeModal();
 		} catch (error) {
 			console.error("Error creating collection:", error);

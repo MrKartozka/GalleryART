@@ -3,6 +3,7 @@ import "./AddedGroups.css";
 import config from "../../config";
 import axios from "axios";
 
+// Компонент AddedGroups отображает добавленные пользователем посты и позволяет управлять ими
 const AddedGroups = ({ posts = [], onPostClick }) => {
 	const [currentPosts, setCurrentPosts] = useState(posts);
 	const [dropdownPostId, setDropdownPostId] = useState(null);
@@ -11,11 +12,13 @@ const AddedGroups = ({ posts = [], onPostClick }) => {
 	const [selectedPostId, setSelectedPostId] = useState(null);
 	const dropdownRefs = useRef(new Map());
 
+	// Хук для обновления текущих постов при изменении props.posts
 	useEffect(() => {
 		setCurrentPosts(posts);
-		fetchCollections();
+		fetchCollections(); // Получаем коллекции при изменении постов
 	}, [posts]);
 
+	// Функция для получения коллекций
 	const fetchCollections = async () => {
 		const accessToken = localStorage.getItem("accessToken");
 		const userId = localStorage.getItem("userId");
@@ -39,12 +42,13 @@ const AddedGroups = ({ posts = [], onPostClick }) => {
 					},
 				}
 			);
-			setCollections(response.data.content);
+			setCollections(response.data.content); // Устанавливаем полученные коллекции в состояние
 		} catch (error) {
 			console.error("Error fetching collections:", error);
 		}
 	};
 
+	// Функция для получения URL изображения по его полному имени файла
 	const getImageUrl = (fullFilename) => {
 		const filenameParts = fullFilename.split("/");
 		const bucketName = filenameParts[0];
@@ -52,13 +56,15 @@ const AddedGroups = ({ posts = [], onPostClick }) => {
 		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`;
 	};
 
+	// Функция для обработки клика по кнопке меню поста
 	const handleButtonClick = (e, postId) => {
-		e.stopPropagation();
+		e.stopPropagation(); // Останавливаем всплытие события
 		setDropdownPostId((prevId) => (prevId === postId ? null : postId));
 	};
 
+	// Функция для обработки удаления поста
 	const handleDelete = async (e, postId) => {
-		e.stopPropagation();
+		e.stopPropagation(); // Останавливаем всплытие события
 		const accessToken = localStorage.getItem("accessToken");
 
 		console.log(`Attempting to delete postId: ${postId}`);
@@ -89,18 +95,21 @@ const AddedGroups = ({ posts = [], onPostClick }) => {
 		}
 	};
 
+	// Функция для обработки добавления поста в коллекцию
 	const handleAddToCollection = (e, postId) => {
-		e.stopPropagation();
-		setSelectedPostId(postId);
-		setShowModal(true);
-		setDropdownPostId(null);
+		e.stopPropagation(); // Останавливаем всплытие события
+		setSelectedPostId(postId); // Устанавливаем выбранный пост
+		setShowModal(true); // Открываем модальное окно
+		setDropdownPostId(null); // Закрываем меню
 	};
 
+	// Функция для закрытия модального окна
 	const closeModal = () => {
-		setShowModal(false);
-		setSelectedPostId(null);
+		setShowModal(false); // Закрываем модальное окно
+		setSelectedPostId(null); // Сбрасываем выбранный пост
 	};
 
+	// Функция для обработки выбора коллекции
 	const handleCollectionSelect = async (collectionId) => {
 		console.log(
 			`Add postId ${selectedPostId} to collectionId ${collectionId}`

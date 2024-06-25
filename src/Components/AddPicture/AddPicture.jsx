@@ -6,6 +6,7 @@ import config from "../../config";
 import axios from "axios";
 import NavigationBarWithoutFind from "../NavigationBarWithoutFind/NavigationBarWithoutFind";
 
+// Компонент AddPicture позволяет пользователю загружать изображения
 const AddPicture = ({ userEmail, onLogout }) => {
 	const [file, setFile] = useState(null);
 	const [imageId, setImageId] = useState(null);
@@ -16,22 +17,24 @@ const AddPicture = ({ userEmail, onLogout }) => {
 	const [username, setUsername] = useState("");
 	const navigate = useNavigate();
 
+	// Функция для обработки загрузки файла
 	const handleUpload = async (acceptedFiles) => {
 		console.log("logging drop/selected file", acceptedFiles);
-		setFile(URL.createObjectURL(acceptedFiles[0]));
+		setFile(URL.createObjectURL(acceptedFiles[0])); // Устанавливаем превью загруженного файла
 
 		const formData = new FormData();
-		formData.append("file", acceptedFiles[0]);
+		formData.append("file", acceptedFiles[0]); // Добавляем файл в FormData для отправки на сервер
 
 		try {
-			const response = await axios.post(config.uploadImageUrl, formData);
+			const response = await axios.post(config.uploadImageUrl, formData); // Загружаем файл на сервер
 			console.log("Successfully uploaded:", response.data);
-			setImageId(response.data.id);
+			setImageId(response.data.id); // Сохраняем ID загруженного изображения
 		} catch (error) {
 			console.error("Error uploading file:", error);
 		}
 	};
 
+	// Функция для обработки добавления изображения
 	const handleAddPicture = async () => {
 		if (!imageId) {
 			console.error("Image ID is missing. Cannot create post.");
@@ -45,15 +48,9 @@ const AddPicture = ({ userEmail, onLogout }) => {
 			description,
 			tags: tags
 				? tags.split(",").map((tag) => ({ name: tag.trim() }))
-				: [],
-			images: [
-				{
-					id: imageId,
-				},
-			],
-			owner: {
-				name: username,
-			},
+				: [], // Форматируем теги
+			images: [{ id: imageId }], // Устанавливаем ID изображения
+			owner: { name: username }, // Устанавливаем имя владельца
 		};
 
 		console.log("Creating post with data:", pictureData);
@@ -71,12 +68,13 @@ const AddPicture = ({ userEmail, onLogout }) => {
 			);
 
 			console.log("Successfully created post:", response.data);
-			navigate("/profile", { state: { group: "added" } });
+			navigate("/profile", { state: { group: "added" } }); // Перенаправляем пользователя на профиль
 		} catch (error) {
 			console.error("Error creating post:", error);
 		}
 	};
 
+	// Хук для получения имени пользователя из localStorage при монтировании компонента
 	useEffect(() => {
 		const username = localStorage.getItem("username");
 		setUsername(username);

@@ -29,6 +29,10 @@ function Settings({ userEmail, onLogout }) {
 			setUsername(userData.name);
 			setDescription(userData.description);
 			if (userData.image && userData.image.fullFilename) {
+				setFile(
+					`${config.apiBaseUrl}/image/${userData.image.fullFilename}`
+				);
+				setImageId(userData.image.id);
 				localStorage.setItem(
 					"profilePicture",
 					userData.image.fullFilename
@@ -53,6 +57,7 @@ function Settings({ userEmail, onLogout }) {
 			const response = await axios.post(config.uploadImageUrl, formData);
 			console.log("Upload success:", response.data);
 			setImageId(response.data.id);
+			localStorage.setItem("profilePicture", response.data.fullFilename);
 		} catch (error) {
 			console.error("Error uploading file:", error);
 		}
@@ -60,15 +65,14 @@ function Settings({ userEmail, onLogout }) {
 
 	const handleSave = async () => {
 		const accessToken = localStorage.getItem("accessToken");
+		const userId = localStorage.getItem("userId");
 
 		const payload = {
+			id: userId,
 			name: username || "Автор",
 			description: description || "",
+			imageId: imageId || null,
 		};
-
-		if (imageId) {
-			payload.imageId = imageId;
-		}
 
 		try {
 			const response = await axios.put(

@@ -8,10 +8,11 @@ import config from "../../config";
 import axios from "axios";
 import { useNavigate, useLocation } from "react-router-dom";
 
+// Компонент профиля пользователя
 const Profile = ({ userEmail, onLogout }) => {
-	const location = useLocation();
+	const location = useLocation(); // Получаем текущее местоположение
 	const [currentGroup, setCurrentGroup] = useState(
-		location.state?.group || "added"
+		location.state?.group || "added" // Устанавливаем текущую группу из состояния местоположения или по умолчанию "added"
 	);
 	const [posts, setPosts] = useState([]);
 	const [selectedPost, setSelectedPost] = useState(null);
@@ -22,10 +23,12 @@ const Profile = ({ userEmail, onLogout }) => {
 	const [profilePicture, setProfilePicture] = useState(null);
 	const navigate = useNavigate();
 
+	// Функция для смены текущей группы
 	const showGroups = (e) => {
 		setCurrentGroup(e.currentTarget.dataset.group);
 	};
 
+	// Хук для загрузки постов при изменении номера страницы или текущей группы
 	useEffect(() => {
 		const fetchPosts = async (number) => {
 			const accessToken = localStorage.getItem("accessToken");
@@ -36,8 +39,9 @@ const Profile = ({ userEmail, onLogout }) => {
 				return;
 			}
 
-			setLoading(true);
+			setLoading(true); // Устанавливаем состояние загрузки в true
 			try {
+				// Выполняем POST-запрос для получения всех постов
 				const response = await axios.post(
 					`${config.apiBaseUrl}/posts/action/search-all`,
 					{
@@ -57,28 +61,30 @@ const Profile = ({ userEmail, onLogout }) => {
 						},
 					}
 				);
-				setPosts(response.data.content);
+				setPosts(response.data.content); // Обновляем состояние постов
 			} catch (error) {
 				console.error("Error loading posts:", error);
 			} finally {
-				setLoading(false);
+				setLoading(false); // Устанавливаем состояние загрузки в false
 			}
 		};
 
 		if (currentGroup === "added") {
-			fetchPosts(number);
+			fetchPosts(number); // Вызываем функцию для загрузки постов
 		}
-	}, [number, currentGroup]);
+	}, [number, currentGroup]); // Перезапускаем хук при изменении номера страницы или текущей группы
 
+	// Обработчик прокрутки для загрузки новых постов при достижении конца страницы
 	const handleScroll = () => {
 		if (
 			window.innerHeight + document.documentElement.scrollTop ===
 			document.documentElement.offsetHeight
 		) {
-			setNumber((prevNumber) => prevNumber + 1);
+			setNumber((prevNumber) => prevNumber + 1); // Увеличиваем номер страницы на 1
 		}
 	};
 
+	// Хук для добавления и удаления обработчика прокрутки
 	useEffect(() => {
 		window.addEventListener("scroll", handleScroll);
 		return () => {
@@ -86,14 +92,17 @@ const Profile = ({ userEmail, onLogout }) => {
 		};
 	}, []);
 
+	// Обработчик клика по посту для перехода на страницу деталей поста
 	const handlePostClick = (post) => {
 		navigate(`/profile/detail/${post.id}`, { state: { post } });
 	};
 
+	// Обработчик для закрытия окна с деталями поста
 	const handleCloseDetail = () => {
 		setSelectedPost(null);
 	};
 
+	// Функция для получения данных пользователя
 	const fetchUserData = async () => {
 		const accessToken = localStorage.getItem("accessToken");
 		const userId = localStorage.getItem("userId");
@@ -104,6 +113,7 @@ const Profile = ({ userEmail, onLogout }) => {
 		}
 
 		try {
+			// Выполняем GET-запрос для получения данных пользователя
 			const response = await axios.get(
 				`${config.apiBaseUrl}/user/${userId}`,
 				{
@@ -112,37 +122,41 @@ const Profile = ({ userEmail, onLogout }) => {
 					},
 				}
 			);
-			const userData = response.data;
-			setUsername(userData.name);
-			setDescription(userData.description);
+			const userData = response.data; // Получаем данные пользователя из ответа
+			setUsername(userData.name); // Устанавливаем имя пользователя
+			setDescription(userData.description); // Устанавливаем описание пользователя
 			setProfilePicture(
-				userData.image ? userData.image.fullFilename : null
+				userData.image ? userData.image.fullFilename : null // Устанавливаем аватарку пользователя
 			);
 		} catch (error) {
 			console.error("Error fetching user data:", error);
 		}
 	};
 
+	// Хук для получения данных пользователя при монтировании компонента
 	useEffect(() => {
 		fetchUserData();
 	}, []);
 
+	// Функция для получения URL аватарки пользователя
 	const getProfilePictureUrl = () => {
 		if (!profilePicture) return "../../../big-profile.png";
 
-		const filenameParts = profilePicture.split("/");
-		const bucketName = filenameParts[0];
-		const keyName = filenameParts.slice(1).join("/");
-		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`;
+		const filenameParts = profilePicture.split("/"); // Разделяем полное имя файла на части
+		const bucketName = filenameParts[0]; // Получаем имя корзины
+		const keyName = filenameParts.slice(1).join("/"); // Получаем ключ имени файла
+		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`; // Возвращаем URL изображения
 	};
 
 	return (
 		<>
+			{/* Отображаем панель навигации без поиска */}
 			<NavigationBarWithoutFind
 				userEmail={userEmail}
 				onLogout={onLogout}
 			/>
 			{selectedPost ? (
+				// Если пост выбран, отображаем его детали
 				<PostDetail post={selectedPost} onClose={handleCloseDetail} />
 			) : (
 				<div className="profile-container">

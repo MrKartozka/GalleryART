@@ -5,42 +5,47 @@ import { useNavigate } from "react-router-dom";
 import config from "../../config";
 import axios from "axios";
 
+// Компонент ProfileNavigationBar отображает навигационную панель с дополнительными функциями профиля
 function ProfileNavigationBar({ userEmail, onLogout }) {
 	const [dropdownState, setDropdownState] = useState(false);
 	const [profilePicture, setProfilePicture] = useState(null);
 	const [username, setUsername] = useState("");
 	const navigate = useNavigate();
 
-	const dropdownRef = useRef(null);
-	const buttonRef = useRef(null);
+	const dropdownRef = useRef(null); // Реф для выпадающего меню
+	const buttonRef = useRef(null); // Реф для кнопки профиля
 
+	// Функция для переключения состояния выпадающего меню
 	const handleDropdown = () => {
 		setDropdownState((prevState) => !prevState); // Инвертируем состояние dropdownState
 	};
 
+	// Функция для обработки клика по логотипу
 	const handleLogoClick = () => {
-		navigate("/gallery");
+		navigate("/gallery"); // Навигация на страницу галереи
 	};
 
+	// Функция для обработки клика по кнопке "Создать"
 	const handleCreateClick = () => {
-		navigate("/add-picture");
+		navigate("/add-picture"); // Навигация на страницу добавления изображения
 	};
 
+	// Функция для получения данных пользователя
 	const fetchUserData = async () => {
 		const accessToken = localStorage.getItem("accessToken");
 		const userId = localStorage.getItem("userId");
 
 		try {
 			const response = await axios.get(
-				`${config.apiBaseUrl}/user/${userId}`,
+				`${config.apiBaseUrl}/user/${userId}`, // Запрос к API для получения данных пользователя
 				{
 					headers: {
 						Authorization: `Bearer ${accessToken}`,
 					},
 				}
 			);
-			const userData = response.data;
-			setUsername(userData.name);
+			const userData = response.data; // Полученные данные пользователя
+			setUsername(userData.name); // Устанавливаем имя пользователя в состояние
 			setProfilePicture(
 				userData.image ? userData.image.fullFilename : null
 			);
@@ -49,10 +54,12 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 		}
 	};
 
+	// Хук useEffect для вызова функции fetchUserData при монтировании компонента
 	useEffect(() => {
 		fetchUserData();
 	}, []);
 
+	// Хук useEffect для обработки кликов вне выпадающего меню
 	useEffect(() => {
 		function handleClickOutside(event) {
 			if (
@@ -75,13 +82,14 @@ function ProfileNavigationBar({ userEmail, onLogout }) {
 		};
 	}, [dropdownState]);
 
+	// Функция для получения URL изображения профиля
 	const getProfilePictureUrl = () => {
-		if (!profilePicture) return "../../../profile.png";
+		if (!profilePicture) return "../../../profile.png"; // Возвращаем URL изображения по умолчанию, если профильное изображение не установлено
 
-		const filenameParts = profilePicture.split("/");
-		const bucketName = filenameParts[0];
-		const keyName = filenameParts.slice(1).join("/");
-		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`;
+		const filenameParts = profilePicture.split("/"); // Разделяем URL изображения на части
+		const bucketName = filenameParts[0]; // Имя корзины
+		const keyName = filenameParts.slice(1).join("/"); // Имя файла
+		return `${config.apiBaseUrl}/image/${bucketName}/${keyName}`; // Возвращаем полный URL изображения
 	};
 
 	return (

@@ -4,17 +4,20 @@ import config from "../../config";
 import { useNavigate, Link } from "react-router-dom";
 import "./LoginForm.css";
 
+// Компонент для входа в систему
 function LoginForm({ setIsAuthenticated, setUserEmail }) {
-	const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+	const [isPasswordVisible, setIsPasswordVisible] = useState(false); // Состояние для отображения/скрытия пароля
 	const [login, setLogin] = useState("");
 	const [password, setPassword] = useState("");
 	const [error, setError] = useState("");
 	const navigate = useNavigate();
 
+	// Функция для переключения видимости пароля
 	const togglePasswordVisibility = () => {
 		setIsPasswordVisible(!isPasswordVisible);
 	};
 
+	// Обработчик отправки формы входа
 	const handleSubmit = async (e) => {
 		e.preventDefault();
 
@@ -22,6 +25,7 @@ function LoginForm({ setIsAuthenticated, setUserEmail }) {
 		console.log("Login URL:", url);
 
 		try {
+			// Выполняем POST-запрос для входа в систему
 			const response = await axios.post(
 				url,
 				{ login, password },
@@ -41,6 +45,7 @@ function LoginForm({ setIsAuthenticated, setUserEmail }) {
 			localStorage.setItem("refreshToken", refreshToken);
 			localStorage.setItem("userEmail", login);
 
+			// Выполняем запрос для получения данных вошедшего пользователя
 			const userResponse = await axios.get(
 				`${config.apiBaseUrl}/auth/logged-user`,
 				{
@@ -52,12 +57,12 @@ function LoginForm({ setIsAuthenticated, setUserEmail }) {
 			);
 
 			const userId = userResponse.data.id;
-			localStorage.setItem("userId", userId);
+			localStorage.setItem("userId", userId); // Сохраняем ID пользователя в localStorage
 
-			setIsAuthenticated(true);
-			setUserEmail(login);
+			setIsAuthenticated(true); // Устанавливаем состояние аутентификации в true
+			setUserEmail(login); // Устанавливаем email пользователя
 
-			navigate("/gallery");
+			navigate("/gallery"); // Перенаправляем пользователя на страницу галереи
 		} catch (error) {
 			console.error("Error during login", error);
 			setError("Ошибка при входе");
